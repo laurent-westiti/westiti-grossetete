@@ -1,0 +1,44 @@
+{#
+  Petits éléments réutilisés d'une page à l'autre.
+#}
+
+{# Un emplacement de photo, tant que la vraie photo n'est pas fournie. Pour
+   la poser, remplacer l'appel par <figure class="photo format-…"><img …></figure>. #}
+{% macro photo_a_venir(titre, detail, format="portrait") -%}
+<figure class="photo a-venir format-{{ format }}">
+  <div>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+      <rect x="3" y="6" width="18" height="14" rx="3"/><circle cx="12" cy="13" r="3.6"/><path d="M8.5 6l1.4-2.2h4.2L15.5 6"/>
+    </svg>
+    <b>{{ titre }}</b>
+    <span>{{ detail }}</span>
+  </div>
+</figure>
+{%- endmacro %}
+
+{# Une taille montrée à l'échelle : une silhouette d'un mètre soixante-quinze
+   tient la grosse tête à bout de bras. Échelle : 0,8 point par centimètre. #}
+{% macro echelle(hauteur) -%}
+{% set r = hauteur * 0.4 %}
+{% set cy = 74 - r + 6 %}
+<svg class="echelle" viewBox="18 6 180 202" role="img"
+     aria-label="Une grosse tête de {{ hauteur }} cm tenue par une personne d'un mètre soixante-quinze">
+  <line class="sol" x1="10" y1="200" x2="190" y2="200"/>
+  <circle class="supporter" cx="70" cy="70" r="10"/>
+  <rect class="supporter" x="56" y="83" width="28" height="62" rx="11"/>
+  <rect class="supporter" x="58" y="138" width="11" height="62" rx="5"/>
+  <rect class="supporter" x="71" y="138" width="11" height="62" rx="5"/>
+  <line class="manche" x1="80" y1="92" x2="108" y2="116" style="stroke:#CFC6B8;stroke-width:8"/>
+  <line class="manche" x1="110" y1="128" x2="110" y2="{{ cy + r - 4 }}"/>
+  <ellipse class="tete" cx="110" cy="{{ cy }}" rx="{{ r * 0.84 }}" ry="{{ r }}"/>
+  <path class="visage" d="M{{ 110 - r*0.38 }} {{ cy + r*0.22 }} Q110 {{ cy + r*0.62 }} {{ 110 + r*0.38 }} {{ cy + r*0.22 }}" stroke="#fff" stroke-width="{{ [r*0.1, 2]|max }}" fill="none" stroke-linecap="round"/>
+  <circle cx="{{ 110 - r*0.3 }}" cy="{{ cy - r*0.18 }}" r="{{ [r*0.08, 1.6]|max }}" fill="#fff"/>
+  <circle cx="{{ 110 + r*0.3 }}" cy="{{ cy - r*0.18 }}" r="{{ [r*0.08, 1.6]|max }}" fill="#fff"/>
+  <text x="40" y="196" text-anchor="end">1,75 m</text>
+  <text x="{{ 110 + r*0.84 + 8 }}" y="{{ cy + 4 }}">{{ hauteur }} cm</text>
+</svg>
+{%- endmacro %}
+
+{% macro euros(montant) -%}
+{%- if montant == montant|round(0) -%}{{ "%.0f"|format(montant) }}{%- else -%}{{ ("%.2f"|format(montant)).replace(".", ",") }}{%- endif %} €
+{%- endmacro %}

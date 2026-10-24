@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+{% from "macros.html" import echelle, euros %}
+{% block titre %}Créer ma grosse tête — Westiti Grosse Tête{% endblock %}
+{% block entete_droite %}<a href="/" style="color:var(--gris); text-decoration:none; font-size:15.5px;">Retour à l'accueil</a>{% endblock %}
+
+{% block corps %}
+<section class="atelier">
+  <div class="page">
+
+    <!-- ==================================================== le formulaire -->
+    <form id="formulaire" method="post" action="/commander" enctype="multipart/form-data" novalidate>
+      <h1>Créer ma grosse tête</h1>
+      <p class="doux" style="margin-top:12px; font-size:18px;">Trois étapes, et
+        l'aperçu se met à jour à chaque choix. Tu ne paies qu'à la fin.</p>
+
+      {% if erreur %}
+      <div class="avis probleme" style="margin-top:20px;">{{ erreur }}</div>
+      {% endif %}
+
+      <!-- 1. La photo -->
+      <section class="etape-form">
+        <header><i>1</i><h2>Sa photo</h2></header>
+        <p class="aide" style="margin:0;">Une photo nette de son visage, prise
+          au téléphone. Inutile de la détourer, nous nous en chargeons.</p>
+
+        <label class="depot" id="depot" for="photo">
+          <input id="photo" name="photo" type="file" accept="image/jpeg,image/png,image/heic,image/webp" required>
+          <div>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+              <path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/>
+            </svg>
+            <b id="depot-titre">Choisir une photo</b>
+            <span class="aide" id="depot-detail">ou la glisser ici — JPEG, PNG ou HEIC, {{ photo_max }} Mo au plus</span>
+          </div>
+        </label>
+
+        <div class="conseils">
+          <div><b>Nette et bien éclairée</b>La lumière du jour donne le meilleur résultat.</div>
+          <div><b>Le visage en grand</b>Il doit occuper une bonne partie de la photo.</div>
+          <div><b>Sans lunettes de soleil</b>Les yeux font toute la ressemblance.</div>
+        </div>
+
+        <div class="recadrer" id="recadrer">
+          <label for="zoom">Recadrer le visage</label>
+          <input id="zoom" type="range" min="1" max="3" step="0.01" value="1">
+          <p class="aide" style="margin:6px 0 0;">Fais glisser la photo dans
+            l'aperçu pour la centrer, et ajuste le zoom ici.</p>
+        </div>
+        <input type="hidden" name="zoom" id="champ-zoom" value="1">
+        <input type="hidden" name="decalage_x" id="champ-x" value="0">
+        <input type="hidden" name="decalage_y" id="champ-y" value="0">
+      </section>
+
+      <!-- 2. La taille -->
+      <section class="etape-form">
+        <header><i>2</i><h2>La taille</h2></header>
+        <p class="aide" style="margin:0;">La hauteur du panneau, du haut des
+          cheveux au menton. La largeur suit la forme du visage.</p>
+        <div class="choix-tailles">
+          {% for cle, t in tailles.items() %}
+          <label>
+            <input type="radio" name="taille" value="{{ cle }}" {% if cle == choix_taille %}checked{% endif %}>
+            <span class="mesure">{{ t.hauteur }} cm</span>
+            <span class="nom">{{ t.nom }}</span>
+            <span class="tarif">{{ euros(t.prix) }}</span>
+          </label>
+          {% endfor %}
+        </div>
+      </section>
+
+      <!-- 3. La quantité -->
+      <section class="etape-form">
+        <header><i>3</i><h2>Combien d'exemplaires&nbsp;?</h2></header>
+        <p class="aide" style="margin:0;">Chaque exemplaire après le premier
+          coûte {{ (remise * 100)|round|int }} % de moins. Pratique quand toute
+          la famille se répartit le long du parcours.</p>
+        <div class="quantite">
+          <button type="button" id="moins" aria-label="Un exemplaire de moins">−</button>
+          <output id="nombre" aria-live="polite">1</output>
+          <button type="button" id="plus" aria-label="Un exemplaire de plus">+</button>
+        </div>
+        <input type="hidden" name="quantite" id="champ-quantite" value="1">
+
+        <label class="accord">
+          <input type="checkbox" name="accord" id="accord" value="oui" required>
+          <span>Je confirme avoir l'accord de la personne représentée pour
+            faire imprimer son visage.</span>
+        </label>
+      </section>
+    </form>
+
+    <!-- ======================================================= l'aperçu -->
+    <aside class="apercu-col">
+      <div class="apercu-carte">
+        <div class="scene">
+          <span class="legende" id="legende">Ton aperçu apparaîtra ici</span>
+          <canvas id="toile" class="vide" width="840" height="880"
+                  aria-label="Aperçu de la grosse tête"></canvas>
+        </div>
+        <div class="recap">
+          <div id="echelles" aria-hidden="true" style="margin:-4px 0 14px;">
+            {% for cle, t in tailles.items() %}
+            <div data-taille="{{ cle }}" {% if cle != choix_taille %}hidden{% endif %}>{{ echelle(t.hauteur) }}</div>
+            {% endfor %}
+          </div>
+          <dl>
+            <dt>Taille</dt><dd id="r-taille">—</dd>
+            <dt>Exemplaires</dt><dd id="r-quantite">1</dd>
+            <dt>Livraison</dt><dd>{% if livraison_offerte %}Offerte{% else %}Calculée à l'étape suivante{% endif %}</dd>
+            <dt class="total">Total</dt><dd class="total" id="r-total">—</dd>
+          </dl>
+          <button class="action" type="submit" form="formulaire" id="commander" disabled>Commander</button>
+          <p class="aide" id="manque">Ajoute une photo pour continuer.</p>
+          <p class="aide" style="margin-top:6px;">Paiement sur une page sécurisée
+            de Stripe. Expédiée {{ delai }}.</p>
+        </div>
+      </div>
+      <p class="aide" style="margin-top:14px; text-align:center;">L'aperçu montre
+        le cadrage. Le détourage précis, au contour des cheveux, est réalisé
+        avant l'impression.</p>
+    </aside>
+
+  </div>
+</section>
+
+<!-- Sur téléphone, l'aperçu passe en tête de page et le bouton reste en bas
+     de l'écran, pour ne jamais avoir à remonter chercher où payer. -->
+<div class="barre-mobile">
+  <div>
+    <b id="m-total">—</b>
+    <span class="aide" id="m-manque">Ajoute une photo</span>
+  </div>
+  <button class="action" type="submit" form="formulaire" id="m-commander" disabled>Commander</button>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  window.GROSSE_TETE = {
+    tailles: {{ tailles_json|safe }},
+    remise: {{ remise }},
+    quantiteMax: {{ quantite_max }},
+    photoMaxMo: {{ photo_max }}
+  };
+</script>
+<script src="/statique/creer.js?v=1"></script>
+{% endblock %}

@@ -1,0 +1,317 @@
+{% extends "base.html" %}
+{% from "macros.html" import photo_a_venir, echelle, euros %}
+{% block titre %}Westiti Grosse Tête — sa tête en géant, pour l'encourager{% endblock %}
+{% block tete %}
+<meta property="og:title" content="Westiti Grosse Tête — sa tête en géant, pour l'encourager">
+<meta property="og:description" content="Une photo suffit. Nous détourons son visage, l'imprimons en grand sur un panneau rigide découpé à la forme, et te l'envoyons avant la course.">
+{% endblock %}
+
+{% block corps %}
+
+<!-- ======================================================== héros -->
+<section class="heros">
+  <div class="page">
+    <div>
+      <p class="promesse">Marathon, semi, trail, ultra, triathlon</p>
+      <h1>Sa tête en géant,<br>au bord du&nbsp;parcours</h1>
+      <p class="emotion" style="margin-top:26px;">Au kilomètre 35, elle verra
+        <i>son propre visage</i> au-dessus de la foule, et elle
+        <i>sourira</i>.</p>
+      <p style="margin-top:22px; font-size:18.5px;">Tu nous envoies une photo,
+        nous détourons son visage et l'imprimons en grand sur un panneau rigide
+        découpé à sa forme. Tu le reçois chez toi avant la course, prêt à être
+        brandi là où elle en aura le plus besoin.</p>
+      <p style="margin-top:28px;">
+        <a class="action" href="/creer">Créer ma grosse tête</a>
+        <a class="secondaire" href="#tailles">Voir les tailles</a>
+      </p>
+      <div class="repere">
+        <b>Dès {{ euros(plancher) }}</b>
+        {% if livraison_offerte %}<span>Livraison offerte</span>{% endif %}
+        <span>Expédiée {{ delai }}</span>
+      </div>
+    </div>
+
+    {{ photo_a_venir("Photo à venir", "Une grosse tête brandie au bord d'un parcours, prise par un photographe Westiti, avec le coureur qui passe et la découvre.") }}
+  </div>
+</section>
+
+<!-- ===================================================== confiance -->
+<section class="confiance">
+  <div class="page">
+    <div><b>1 photo</b><span>suffit, prise avec un simple téléphone</span></div>
+    <div><b>45 à 80 cm</b><span>de haut, pour se voir de loin</span></div>
+    <div><b>3 mm</b><span>de PVC rigide, qui ne craint pas la pluie</span></div>
+    <div><b>100 %</b><span>découpée au contour de son visage</span></div>
+  </div>
+</section>
+
+<!-- ====================================================== problème -->
+<section class="bande sombre probleme">
+  <div class="page">
+    <div>
+      <h2>Au bord d'une course,<br>tout le monde crie.</h2>
+      <p class="emotion" style="margin-top:24px;">Une pancarte de plus
+        se perd dans la foule.<br><i>Un visage géant, jamais.</i></p>
+    </div>
+    <div>
+      <p>Tu connais ce moment. Tu attends depuis une heure, les coureurs
+        passent par centaines, et la personne pour qui tu es là file devant
+        toi sans te voir. Elle a la tête baissée, les jambes lourdes, et
+        ton prénom crié au milieu de mille autres ne lui parvient pas.</p>
+      <p>Une grosse tête change tout, parce que c'est la seule chose qu'un
+        coureur repère à coup sûr dans une foule : son propre visage, en grand.
+        Il lève les yeux, il rit, il te trouve. Pour quelques secondes, les
+        jambes oublient les kilomètres.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================ la grosse tête -->
+<section class="bande" id="grosse-tete">
+  <div class="page">
+    <div class="intro">
+      <h2>Ce que tu reçois</h2>
+      <p>Un panneau rigide à son effigie, découpé au plus près de son visage,
+        qui se tient d'une main et se range ensuite sur une étagère.</p>
+    </div>
+
+    <div class="planches">
+      <figure>
+        {{ photo_a_venir("Photo à venir", "Gros plan sur la découpe qui suit les cheveux et le menton.", "carre") }}
+        <figcaption><b>Découpée à la forme</b>
+          Nous suivons le contour de son visage et de ses cheveux, avec une
+          fine marge blanche qui fait ressortir la silhouette.</figcaption>
+      </figure>
+      <figure>
+        {{ photo_a_venir("Photo à venir", "La grosse tête tenue sous la pluie ou dans le vent, sur un trail.", "carre") }}
+        <figcaption><b>Un PVC rigide de 3 mm</b>
+          Il ne se plie pas dans le vent et ne gondole pas sous la pluie. Il
+          reste léger, si bien qu'il se porte à bout de bras toute une
+          matinée.</figcaption>
+      </figure>
+      <figure>
+        {{ photo_a_venir("Photo à venir", "Une famille qui brandit trois grosses têtes à un ravitaillement.", "carre") }}
+        <figcaption><b>Pour toute la bande</b>
+          Les exemplaires suivants du même visage coûtent
+          {{ (remise * 100)|round|int }} % de moins. La famille, le club et les
+          collègues peuvent chacun avoir la leur.</figcaption>
+      </figure>
+      <figure>
+        {{ photo_a_venir("Photo à venir", "La grosse tête accrochée au mur à côté de la médaille.", "carre") }}
+        <figcaption><b>Elle reste après la course</b>
+          Elle finit souvent au mur, à côté de la médaille et du dossard. Le
+          souvenir dure bien plus longtemps que la course.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ===================================================== les tailles -->
+<section class="bande papier" id="tailles">
+  <div class="page">
+    <div class="intro">
+      <h2>Trois tailles, à l'échelle</h2>
+      <p>Chaque taille est tenue ici par une silhouette d'un mètre
+        soixante-quinze, pour que tu voies ce que donnera la tienne au bord du
+        parcours.</p>
+    </div>
+
+    <div class="tailles">
+      {% for cle, t in tailles.items() %}
+      <div class="taille{% if cle == conseillee %} conseillee{% endif %}">
+        {% if cle == conseillee %}<span class="badge">La plus choisie</span>{% endif %}
+        {{ echelle(t.hauteur) }}
+        <div class="mesure">{{ t.hauteur }} cm</div>
+        <div class="nom">{{ t.nom }}</div>
+        <p>{{ t.pour }}</p>
+        <div class="tarif"><b>{{ euros(t.prix) }}</b> l'unité</div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <p style="margin-top:34px;">
+      <a class="action" href="/creer">Créer ma grosse tête</a>
+    </p>
+  </div>
+</section>
+
+<!-- ============================================ comment ça marche -->
+<section class="bande" id="comment">
+  <div class="page">
+    <div class="intro">
+      <h2>Comment ça marche</h2>
+      <p>Tu vois ta grosse tête telle qu'elle sera imprimée avant de payer quoi
+        que ce soit.</p>
+    </div>
+
+    <div class="etapes">
+      <div>
+        <h3>Tu envoies une photo de son visage</h3>
+        <p>Une photo nette prise au téléphone suffit. Inutile de la détourer,
+          nous nous en chargeons.</p>
+      </div>
+      <div>
+        <h3>Nous détourons et te montrons l'aperçu</h3>
+        <p>Son visage apparaît découpé, à la taille choisie, tenu par une
+          silhouette qui donne l'échelle. Tu peux recadrer jusqu'à ce qu'il te
+          plaise.</p>
+      </div>
+      <div>
+        <h3>Tu choisis la taille et le nombre d'exemplaires</h3>
+        <p>Le paiement se fait en trente secondes sur une page sécurisée de
+          Stripe, et la facture arrive aussitôt par courriel.</p>
+      </div>
+      <div>
+        <h3>Nous imprimons et expédions</h3>
+        <p>Ta grosse tête est fabriquée en France et expédiée {{ delai }}.
+          Pense à commander une dizaine de jours avant la course.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================= l'objet -->
+<section class="bande serre papier">
+  <div class="page">
+    <div class="intro"><h2>L'objet</h2></div>
+    <div class="fiche">
+      <div><b>45, 60 ou 80 cm</b><span>De haut, la largeur suit son visage</span></div>
+      <div><b>PVC expansé 3 mm</b><span>Rigide, léger, résistant à l'eau</span></div>
+      <div><b>Impression couleur</b><span>Haute définition, au recto</span></div>
+      <div><b>Découpe à la forme</b><span>Au contour du visage et des cheveux</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================================== prix -->
+<section class="bande serre">
+  <div class="page">
+    <div class="prix">
+      <div class="dedans">
+        <div>
+          <h2>Une photo, un prix clair.</h2>
+          <p style="margin-top:14px;">Détourage, impression, découpe et
+            expédition sont compris. Tu ne paies qu'après avoir vu l'aperçu,
+            et rien ne t'y oblige.</p>
+          <a class="action" href="/creer">Créer ma grosse tête</a>
+        </div>
+        <div style="text-align:right;">
+          <p style="margin-bottom:6px;">À partir de</p>
+          <div class="montant">{{ "%.0f"|format(plancher) }}<small> €</small></div>
+          <p style="margin-top:10px;">Expédiée {{ delai }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ plusieurs exemplaires -->
+<section class="bande" style="padding-top:0;">
+  <div class="page">
+    <div class="bande-verte">
+      <div>
+        <span class="etiquette">Famille, club, collègues</span>
+        <h2>Toute la bande sera au bord du parcours&nbsp;?</h2>
+        <p style="margin-top:16px;">Commande plusieurs exemplaires du même
+          visage en une seule fois. Chaque exemplaire après le premier coûte
+          {{ (remise * 100)|round|int }} % de moins, et tout arrive dans le
+          même colis. Chacun pourra se poster à un endroit différent du
+          parcours.</p>
+      </div>
+      <div>
+        <a class="action" href="/creer">Commander pour la bande</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================================================== fondateur -->
+<section class="bande papier">
+  <div class="page fondateur">
+    <img src="/img/laurent.jpg" width="420" height="420"
+         alt="Portrait de Laurent Thillaye du Boullay">
+    <div>
+      <p class="citation">« Chez Westiti, nos photographes voient passer des
+        milliers de coureurs à chaque course. Sur les photos, les plus grands
+        sourires apparaissent presque toujours au même endroit : là où un
+        proche brandit une grosse tête.</p>
+      <p class="citation">J'ai voulu que chacun puisse offrir ce moment, sans
+        logiciel ni imprimeur à chercher. Une photo suffit, et nous nous
+        occupons du reste. »</p>
+      <p class="qui">Laurent Thillaye du Boullay</p>
+      <p class="role">CEO Westiti — plus de 380 photographes partenaires,
+        partout en France</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====================================================== questions -->
+<section class="bande" id="questions">
+  <div class="page">
+    <div class="intro"><h2>Questions</h2></div>
+    <div class="faq">
+      <details>
+        <summary>Quelle photo dois-je envoyer&nbsp;?</summary>
+        <p>Une photo nette, de face ou de trois quarts, où le visage est bien
+          éclairé et occupe une bonne partie de l'image. Une photo prise au
+          téléphone convient très bien. Évite les captures d'écran et les
+          photos floues, et inutile de la détourer toi-même.</p>
+      </details>
+      <details>
+        <summary>Combien de temps avant la course dois-je commander&nbsp;?</summary>
+        <p>Ta grosse tête est expédiée {{ delai }}, puis la livraison prend
+          en général deux à trois jours. Nous te conseillons de commander une
+          dizaine de jours avant la course pour être tranquille.</p>
+      </details>
+      <details>
+        <summary>Puis-je voir le résultat avant de payer&nbsp;?</summary>
+        <p>Oui. L'aperçu te montre son visage détouré, à la taille choisie,
+          tel qu'il sera imprimé. Tu peux recadrer, changer de photo ou de
+          taille autant de fois que tu veux avant de commander.</p>
+      </details>
+      <details>
+        <summary>Faut-il l'accord de la personne représentée&nbsp;?</summary>
+        <p>Oui. Son visage lui appartient, et tu nous confirmes au moment de la
+          commande que tu as son accord. Pour une surprise, l'accord d'un
+          proche qui la connaît bien suffit en général, mais c'est à toi d'en
+          juger.</p>
+      </details>
+      <details>
+        <summary>Que faites-vous de la photo&nbsp;?</summary>
+        <p>Elle sert uniquement à fabriquer ta grosse tête. Nous l'effaçons
+          une fois la commande expédiée, et elle n'est jamais réutilisée ni
+          montrée ailleurs.</p>
+      </details>
+      <details>
+        <summary>Est-ce que ça résiste à la pluie&nbsp;?</summary>
+        <p>Oui. Le PVC ne craint pas l'eau et l'impression ne coule pas. Le
+          panneau reste rigide même par grand vent, ce qui n'est pas le cas
+          d'une pancarte en carton.</p>
+      </details>
+      <details>
+        <summary>Puis-je commander plusieurs têtes différentes&nbsp;?</summary>
+        <p>Oui. Crée la première, puis recommence avec une autre photo. Pour
+          plusieurs exemplaires du même visage, chaque exemplaire après le
+          premier coûte {{ (remise * 100)|round|int }} % de moins.</p>
+      </details>
+      <details>
+        <summary>Vous livrez où&nbsp;?</summary>
+        <p>Partout en France métropolitaine, à l'adresse de ton choix.
+          {% if livraison_offerte %}La livraison est offerte.{% endif %}</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================== dernier appel -->
+<section class="bande serre papier">
+  <div class="page" style="text-align:center;">
+    <h2 style="margin-inline:auto; max-width:18ch;">Sa prochaine course mérite un supporter qu'on ne rate pas.</h2>
+    <p class="doux" style="margin:16px auto 26px; max-width:46ch;">
+      Une photo pour commencer. Rien à payer pour voir l'aperçu.</p>
+    <a class="action" href="/creer">Créer ma grosse tête</a>
+  </div>
+</section>
+
+{% endblock %}

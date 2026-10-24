@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block titre %}Presque prêt — Westiti Grosse Tête{% endblock %}
+{% block corps %}
+<section class="message papier">
+  <div class="page">
+    <h1>Ta grosse tête est prête, le paiement pas encore.</h1>
+    <p>Nous ouvrons les commandes dans quelques jours. Ta photo n'a pas été
+      conservée : il te suffira de revenir et de recommencer, cela prend une
+      minute.</p>
+    <p class="aide">Récapitulatif de ton choix : {{ taille }} cm,
+      {{ quantite }} exemplaire{% if quantite > 1 %}s{% endif %}, soit
+      {{ total }} au total.</p>
+    <a class="action" href="/creer">Revenir à l'atelier</a>
+  </div>
+</section>
+{% endblock %}
