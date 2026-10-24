@@ -100,18 +100,11 @@ a { color: var(--vert); text-underline-offset: 3px; }
   gap: 16px; padding: 14px 0;
 }
 
-/* Le logotype : le mot Westiti de la marque, et le nom du service composé
-   en Gabarito vert, comme « Memories » l'est sous le même mot. */
-.marque {
-  display: inline-flex; flex-direction: column; gap: 2px;
-  text-decoration: none; line-height: 1;
-}
-.marque img { height: 26px; width: auto; }
-.marque span {
-  color: var(--vert); font-weight: 900; font-size: 25px;
-  letter-spacing: -0.035em; line-height: .95;
-}
-@media (max-width: 560px) { .marque img { height: 21px; } .marque span { font-size: 20px; } }
+/* Le logotype : le mot Westiti de la marque, « Grosse Tête » en vert, et
+   le personnage qui brandit sa propre tête. */
+.marque { display: block; line-height: 0; }
+.marque img { display: block; width: auto; height: 60px; }
+@media (max-width: 560px) { .marque img { height: 42px; } }
 
 .entete nav { display: flex; align-items: center; gap: 22px; }
 .entete nav a:not(.action) { color: var(--gris); text-decoration: none; font-size: 15.5px; }
