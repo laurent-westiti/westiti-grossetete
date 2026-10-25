@@ -24,11 +24,11 @@ Grille tarifaire (TTC, pour 1, 2 ou 3 exemplaires du même visage) :
 
 | Hauteur | 1 tête | 2 têtes | 3 têtes |
 |---|---|---|---|
-| 30 cm | 39,90 € | 44,90 € | 46,90 € |
-| 45 cm | 44,90 € | 49,90 € | 55,90 € |
-| 60 cm | 59,90 € | 66,90 € | 74,90 € |
-| 80 cm | 64,90 € | 69,90 € | 76,90 € |
-| 100 cm | 120 € | 130 € | 144,90 € |
+| 30 cm | 49 € | 54 € | 59 € |
+| 45 cm | 52 € | 59 € | 64 € |
+| 60 cm | 59 € | 69 € | 79 € |
+| 80 cm | 64 € | 84 € | 99 € |
+| 100 cm | 124 € | 159 € | 199 € |
 
 Le délai d'expédition affiché reste provisoire, en attendant celui de
 Fulfiller.

@@ -19,19 +19,19 @@ PRODUCTION = os.environ.get("WG_PRODUCTION") == "1"
 
 # Hauteur du panneau en centimètres, et prix TTC en euros de la commande
 # selon le nombre d'exemplaires du même visage (1, 2 ou 3). Les deuxième et
-# troisième exemplaires coûtent très peu : c'est l'argument des commandes
-# familiales. La clé sert d'identifiant dans les formulaires.
+# troisième exemplaires coûtent bien moins cher que le premier : c'est
+# l'argument des commandes familiales. La clé sert d'identifiant dans les formulaires.
 TAILLES = {
     "30":  {"hauteur": 30,  "nom": "Compacte",           "pour": "Légère et facile à glisser dans un sac, idéale pour les enfants.",
-            "prix": {1: 39.90, 2: 44.90, 3: 46.90}},
+            "prix": {1: 49, 2: 54, 3: 59}},
     "45":  {"hauteur": 45,  "nom": "Visible",            "pour": "Facile à tenir à bout de bras, même sur un long parcours.",
-            "prix": {1: 44.90, 2: 49.90, 3: 55.90}},
+            "prix": {1: 52, 2: 59, 3: 64}},
     "60":  {"hauteur": 60,  "nom": "Repérable",          "pour": "Le bon compromis : elle se voit de loin et se transporte sans peine.",
-            "prix": {1: 59.90, 2: 66.90, 3: 74.90}},
+            "prix": {1: 59, 2: 69, 3: 79}},
     "80":  {"hauteur": 80,  "nom": "Impossible à rater", "pour": "Pour les arrivées, les ravitos et les virages où toute la foule se masse.",
-            "prix": {1: 64.90, 2: 69.90, 3: 76.90}},
+            "prix": {1: 64, 2: 84, 3: 99}},
     "100": {"hauteur": 100, "nom": "Géante",             "pour": "Un mètre de haut : elle dépasse toutes les têtes de la foule.",
-            "prix": {1: 120.00, 2: 130.00, 3: 144.90}},
+            "prix": {1: 124, 2: 159, 3: 199}},
 }
 TAILLE_CONSEILLEE = "60"
 QUANTITES = (1, 2, 3)

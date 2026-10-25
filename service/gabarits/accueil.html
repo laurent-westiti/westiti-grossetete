@@ -117,7 +117,7 @@
         soixante-quinze, pour que tu voies ce que donnera la tienne au bord du
         parcours.</p>
       <p>Chacune se commande en 1, 2 ou 3 exemplaires du même visage. La
-        deuxième et la troisième tête ne coûtent que quelques euros de plus,
+        deuxième et la troisième tête coûtent bien moins cher que la première,
         si bien qu'à trois chaque tête revient jusqu'à {{ economie }} % moins
         cher qu'à l'unité.</p>
     </div>
@@ -198,13 +198,14 @@
           <h2>Une photo, un prix clair.</h2>
           <p style="margin-top:14px;">Détourage, impression, découpe et
             expédition sont compris. La deuxième et la troisième tête coûtent
-            à peine plus que la première. Tu ne paies qu'après avoir vu
+            bien moins cher que la première. Tu ne paies qu'après avoir vu
             l'aperçu, et rien ne t'y oblige.</p>
           <a class="action" href="/creer">Créer une grosse tête</a>
         </div>
         <div style="text-align:right;">
           <p style="margin-bottom:6px;">À partir de</p>
-          <div class="montant">{{ plancher|int }}<small>,{{ "%02d"|format(((plancher - plancher|int) * 100)|round|int) }} €</small></div>
+          {% set centimes = ((plancher - plancher|int) * 100)|round|int %}
+          <div class="montant">{{ plancher|int }}<small>{% if centimes %},{{ "%02d"|format(centimes) }}{% endif %} €</small></div>
           <p style="margin-top:10px;">Expédiée {{ delai }}</p>
         </div>
       </div>
