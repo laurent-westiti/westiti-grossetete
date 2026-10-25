@@ -47,7 +47,8 @@ def _commun() -> dict:
         "tailles": reglages.TAILLES,
         "conseillee": reglages.TAILLE_CONSEILLEE,
         "plancher": reglages.prix_plancher(),
-        "remise": reglages.REMISE_SUPPLEMENTAIRE,
+        "quantites": reglages.QUANTITES,
+        "economie": reglages.economie_max(),
         "livraison_offerte": reglages.LIVRAISON_OFFERTE,
         "delai": reglages.DELAI_EXPEDITION,
     }
@@ -68,7 +69,7 @@ def creer(request: Request, taille: str = "", erreur: str = ""):
     contexte.update({
         "choix_taille": taille if taille in reglages.TAILLES else reglages.TAILLE_CONSEILLEE,
         "tailles_json": json.dumps(reglages.TAILLES, ensure_ascii=False),
-        "quantite_max": reglages.QUANTITE_MAX,
+        "choix_quantite": 1,
         "photo_max": reglages.PHOTO_MAX_MO,
         "erreur": erreur,
     })
@@ -99,7 +100,8 @@ async def commander(
     if len(contenu) > reglages.PHOTO_MAX_MO * 1024 * 1024:
         return refuser(f"La photo dépasse {reglages.PHOTO_MAX_MO} Mo.")
 
-    quantite = max(1, min(quantite, reglages.QUANTITE_MAX))
+    if quantite not in reglages.QUANTITES:
+        return refuser("Choisis 1, 2 ou 3 exemplaires.")
     total = reglages.prix_commande(taille, quantite)
 
     if not reglages.paiement_ouvert():

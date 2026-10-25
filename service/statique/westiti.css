@@ -206,26 +206,52 @@ a { color: var(--vert); text-underline-offset: 3px; }
    qui dépasse les épaules dit tout. */
 
 .tailles {
-  display: grid; gap: 20px; margin-top: 42px;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  display: grid; gap: 16px; margin-top: 42px;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
 }
 .taille {
   position: relative; background: var(--blanc); border: 1.5px solid var(--trait);
-  border-radius: 20px; padding: 26px 26px 24px;
-  display: flex; flex-direction: column;
+  border-radius: 20px; padding: 22px 20px 20px;
+  display: flex; flex-direction: column; min-width: 0;
 }
 .taille.conseillee { border-color: var(--vert); box-shadow: 0 0 0 3px var(--vert-pale); }
 .taille .badge {
-  position: absolute; top: -13px; left: 24px;
+  position: absolute; top: -13px; left: 20px;
   background: var(--vert); color: #fff; font-size: 13px; font-weight: 700;
   padding: 4px 12px; border-radius: 999px;
 }
-.taille svg.echelle { width: 100%; height: 190px; margin-bottom: 18px; }
-.taille .mesure { font-size: 34px; font-weight: 700; letter-spacing: -0.04em; line-height: 1; }
-.taille .nom { color: var(--vert); font-weight: 600; margin: 6px 0 10px; }
-.taille p { color: var(--gris); font-size: 15.5px; margin-bottom: 18px; }
-.taille .tarif { margin-top: auto; font-size: 15px; color: var(--gris); }
-.taille .tarif b { font-size: 24px; color: var(--encre); letter-spacing: -0.03em; }
+.taille svg.echelle { width: 100%; height: 170px; margin-bottom: 14px; }
+.taille .mesure { font-size: 32px; font-weight: 700; letter-spacing: -0.04em; line-height: 1; }
+.taille .nom { color: var(--vert); font-weight: 600; margin: 6px 0 8px; }
+.taille p { color: var(--gris); font-size: 15px; margin-bottom: 16px; }
+.taille .grille-prix { margin-top: auto; }
+
+/* Les trois prix : la ligne du dessus est le prix d'appel, les deux
+   suivantes disent combien coûte chaque tête en plus, en vert, parce que
+   c'est là que se trouve la bonne affaire. */
+.grille-prix { border-top: 1px solid var(--trait); font-variant-numeric: tabular-nums; }
+.grille-prix .ligne {
+  display: grid; grid-template-columns: 1fr auto; gap: 0 10px; align-items: baseline;
+  padding: 9px 0; border-bottom: 1px solid var(--trait); font-size: 15px;
+}
+.grille-prix .ligne:last-child { border-bottom: 0; }
+.grille-prix span { color: var(--gris); }
+.grille-prix b { font-size: 19px; letter-spacing: -0.02em; }
+.grille-prix small { grid-column: 1 / -1; color: var(--vert); font-size: 13.5px; font-weight: 600; line-height: 1.35; }
+
+/* Sur un écran moyen, cinq colonnes seraient trop étroites : chaque taille
+   devient une ligne, le dessin à gauche et les prix à droite. */
+@media (max-width: 1099px) {
+  .tailles { grid-template-columns: 1fr; gap: 20px; }
+  .taille { display: grid; grid-template-columns: 150px minmax(0, 1fr) minmax(0, 260px); gap: 0 26px; align-items: center; }
+  .taille svg.echelle { grid-row: 1 / span 3; height: 150px; margin: 0; }
+  .taille .grille-prix { grid-column: 3; grid-row: 1 / span 3; margin: 0; }
+}
+@media (max-width: 720px) {
+  .taille { grid-template-columns: 110px minmax(0, 1fr); }
+  .taille svg.echelle { grid-row: 1 / span 3; height: 120px; }
+  .taille .grille-prix { grid-column: 1 / -1; grid-row: auto; margin-top: 14px; }
+}
 
 .echelle .supporter { fill: #CFC6B8; }
 .echelle .manche { stroke: #A79C8B; stroke-width: 3; stroke-linecap: round; }
@@ -382,25 +408,35 @@ input:focus, textarea:focus, select:focus {
 .recadrer input[type=range] { width: 100%; accent-color: var(--vert); }
 
 /* Les tailles, en cartes que l'on coche. */
-.choix-tailles { display: grid; gap: 12px; margin-top: 16px; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
-.choix-tailles label {
-  margin: 0; padding: 16px 16px 14px; border: 1.5px solid var(--trait); border-radius: 14px;
-  cursor: pointer; font-weight: 400; position: relative; background: var(--blanc);
+.choix-tailles { display: grid; gap: 10px; margin-top: 16px; grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.choix-tailles label, .choix-quantites label {
+  margin: 0; padding: 14px 14px 12px; border: 1.5px solid var(--trait); border-radius: 14px;
+  cursor: pointer; font-weight: 400; position: relative; background: var(--blanc); min-width: 0;
 }
-.choix-tailles input { position: absolute; opacity: 0; }
-.choix-tailles label:has(input:checked) { border-color: var(--vert); box-shadow: 0 0 0 3px var(--vert-pale); }
-.choix-tailles label:has(input:focus-visible) { outline: 3px solid var(--corail); outline-offset: 2px; }
-.choix-tailles .mesure { display: block; font-size: 26px; font-weight: 700; letter-spacing: -0.04em; }
-.choix-tailles .nom { display: block; color: var(--vert); font-size: 14.5px; font-weight: 600; }
-.choix-tailles .tarif { display: block; margin-top: 8px; color: var(--gris); font-size: 14.5px; }
+.choix-tailles input, .choix-quantites input { position: absolute; opacity: 0; }
+.choix-tailles label:has(input:checked), .choix-quantites label:has(input:checked) { border-color: var(--vert); box-shadow: 0 0 0 3px var(--vert-pale); }
+.choix-tailles label:has(input:focus-visible), .choix-quantites label:has(input:focus-visible) { outline: 3px solid var(--corail); outline-offset: 2px; }
+.choix-tailles .mesure { display: block; font-size: 24px; font-weight: 700; letter-spacing: -0.04em; }
+.choix-tailles .nom { display: block; color: var(--vert); font-size: 13.5px; font-weight: 600; line-height: 1.3; }
+.choix-tailles .tarif { display: block; margin-top: 8px; color: var(--gris); font-size: 14px; }
+@media (max-width: 720px) {
+  .choix-tailles { grid-template-columns: 1fr; }
+  .choix-tailles label { display: grid; grid-template-columns: 76px 1fr auto; align-items: baseline; gap: 10px; }
+  .choix-tailles .tarif { margin: 0; }
+}
 
-.quantite { display: inline-flex; align-items: center; margin-top: 14px; border: 1.5px solid var(--trait); border-radius: 999px; background: var(--blanc); }
-.quantite button {
-  width: 46px; height: 46px; border: 0; background: none; font: inherit; font-size: 22px;
-  color: var(--vert); cursor: pointer; border-radius: 999px;
+/* Les quantités : trois cartes, dont les prix suivent la taille choisie. */
+.choix-quantites { display: grid; gap: 10px; margin-top: 16px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.choix-quantites .combien { display: block; font-size: 20px; font-weight: 700; letter-spacing: -0.03em; }
+.choix-quantites .total { display: block; font-size: 17px; margin-top: 2px; font-variant-numeric: tabular-nums; }
+.choix-quantites .gain { display: block; margin-top: 6px; color: var(--vert); font-size: 13.5px; font-weight: 600; line-height: 1.35; }
+.choix-quantites .badge {
+  position: absolute; top: -11px; right: 12px; background: var(--corail); color: #fff;
+  font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 999px;
 }
-.quantite button:hover { background: var(--papier); }
-.quantite output { min-width: 40px; text-align: center; font-size: 19px; font-weight: 700; }
+@media (max-width: 560px) {
+  .choix-quantites { grid-template-columns: 1fr; }
+}
 
 .accord { display: flex; gap: 12px; align-items: flex-start; margin: 22px 0 0; font-weight: 400; font-size: 15px; cursor: pointer; }
 .accord input { width: 19px; height: 19px; accent-color: var(--vert); flex: none; margin-top: 2px; }

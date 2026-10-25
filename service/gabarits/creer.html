@@ -62,7 +62,7 @@
             <input type="radio" name="taille" value="{{ cle }}" {% if cle == choix_taille %}checked{% endif %}>
             <span class="mesure">{{ t.hauteur }} cm</span>
             <span class="nom">{{ t.nom }}</span>
-            <span class="tarif">{{ euros(t.prix) }}</span>
+            <span class="tarif">dès {{ euros(t.prix[1]) }}</span>
           </label>
           {% endfor %}
         </div>
@@ -71,15 +71,21 @@
       <!-- 3. La quantité -->
       <section class="etape-form">
         <header><i>3</i><h2>Combien d'exemplaires&nbsp;?</h2></header>
-        <p class="aide" style="margin:0;">Chaque exemplaire après le premier
-          coûte {{ (remise * 100)|round|int }} % de moins. Pratique quand toute
-          la famille se répartit le long du parcours.</p>
-        <div class="quantite">
-          <button type="button" id="moins" aria-label="Un exemplaire de moins">−</button>
-          <output id="nombre" aria-live="polite">1</output>
-          <button type="button" id="plus" aria-label="Un exemplaire de plus">+</button>
+        <p class="aide" style="margin:0;">Le même visage, en 1, 2 ou 3
+          exemplaires. La deuxième et la troisième tête coûtent à peine plus,
+          pratique quand toute la famille se répartit le long du parcours.</p>
+        {% set t0 = tailles[choix_taille] %}
+        <div class="choix-quantites">
+          {% for q in quantites %}
+          <label>
+            <input type="radio" name="quantite" value="{{ q }}" {% if q == choix_quantite %}checked{% endif %}>
+            {% if q == 3 %}<span class="badge">Meilleur prix par tête</span>{% endif %}
+            <span class="combien">{{ q }} tête{% if q > 1 %}s{% endif %}</span>
+            <span class="total" data-q="{{ q }}">{{ euros(t0.prix[q]) }}</span>
+            <span class="gain" data-gain="{{ q }}">{% if q == 1 %}Prix à l'unité{% else %}La {{ q }}<sup>e</sup> pour +{{ euros(t0.prix[q] - t0.prix[q - 1]) }}, soit {{ euros((t0.prix[q] / q)|round(2)) }} la tête{% endif %}</span>
+          </label>
+          {% endfor %}
         </div>
-        <input type="hidden" name="quantite" id="champ-quantite" value="1">
 
         <label class="accord">
           <input type="checkbox" name="accord" id="accord" value="oui" required>
@@ -138,10 +144,8 @@
 <script>
   window.GROSSE_TETE = {
     tailles: {{ tailles_json|safe }},
-    remise: {{ remise }},
-    quantiteMax: {{ quantite_max }},
     photoMaxMo: {{ photo_max }}
   };
 </script>
-<script src="/statique/creer.js?v=1"></script>
+<script src="/statique/creer.js?v=2"></script>
 {% endblock %}

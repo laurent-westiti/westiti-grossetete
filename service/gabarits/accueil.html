@@ -1,5 +1,6 @@
 {% extends "base.html" %}
-{% from "macros.html" import photo_a_venir, echelle, euros %}
+{% from "macros.html" import photo_a_venir, echelle, euros, grille_prix %}
+{% set hauteurs = tailles.values()|map(attribute="hauteur")|list %}
 {% block titre %}Westiti Grosse Tête — sa tête en géant, pour l'encourager{% endblock %}
 {% block tete %}
 <meta property="og:title" content="Westiti Grosse Tête — sa tête en géant, pour l'encourager">
@@ -39,7 +40,7 @@
 <section class="confiance">
   <div class="page">
     <div><b>1 photo</b><span>suffit, prise avec un simple téléphone</span></div>
-    <div><b>45 à 80 cm</b><span>de haut, pour se voir de loin</span></div>
+    <div><b>{{ hauteurs|min }} à {{ hauteurs|max }} cm</b><span>de haut, pour se voir de loin</span></div>
     <div><b>3 mm</b><span>de PVC rigide, qui ne craint pas la pluie</span></div>
     <div><b>100 %</b><span>découpée au contour de son visage</span></div>
   </div>
@@ -92,9 +93,10 @@
       <figure>
         {{ photo_a_venir("Photo à venir", "Une famille qui brandit trois grosses têtes à un ravitaillement.", "carre") }}
         <figcaption><b>Pour toute la bande</b>
-          Les exemplaires suivants du même visage coûtent
-          {{ (remise * 100)|round|int }} % de moins. La famille, le club et les
-          collègues peuvent chacun avoir la leur.</figcaption>
+          Jusqu'à trois exemplaires du même visage,
+          et à trois chaque tête revient jusqu'à {{ economie }} % moins cher.
+          La famille, le club et les collègues peuvent chacun avoir la
+          leur.</figcaption>
       </figure>
       <figure>
         {{ photo_a_venir("Photo à venir", "La grosse tête accrochée au mur à côté de la médaille.", "carre") }}
@@ -110,21 +112,25 @@
 <section class="bande papier" id="tailles">
   <div class="page">
     <div class="intro">
-      <h2>Trois tailles, à l'échelle</h2>
+      <h2>Cinq tailles, à l'échelle</h2>
       <p>Chaque taille est tenue ici par une silhouette d'un mètre
         soixante-quinze, pour que tu voies ce que donnera la tienne au bord du
         parcours.</p>
+      <p>Chacune se commande en 1, 2 ou 3 exemplaires du même visage. La
+        deuxième et la troisième tête ne coûtent que quelques euros de plus,
+        si bien qu'à trois chaque tête revient jusqu'à {{ economie }} % moins
+        cher qu'à l'unité.</p>
     </div>
 
     <div class="tailles">
       {% for cle, t in tailles.items() %}
       <div class="taille{% if cle == conseillee %} conseillee{% endif %}">
-        {% if cle == conseillee %}<span class="badge">La plus choisie</span>{% endif %}
+        {% if cle == conseillee %}<span class="badge">Notre conseil</span>{% endif %}
         {{ echelle(t.hauteur) }}
         <div class="mesure">{{ t.hauteur }} cm</div>
         <div class="nom">{{ t.nom }}</div>
         <p>{{ t.pour }}</p>
-        <div class="tarif"><b>{{ euros(t.prix) }}</b> l'unité</div>
+        {{ grille_prix(t) }}
       </div>
       {% endfor %}
     </div>
@@ -175,10 +181,10 @@
   <div class="page">
     <div class="intro"><h2>L'objet</h2></div>
     <div class="fiche">
-      <div><b>45, 60 ou 80 cm</b><span>De haut, la largeur suit son visage</span></div>
+      <div><b>De {{ hauteurs|min }} à {{ hauteurs|max }} cm</b><span>{{ hauteurs[:-1]|join(", ") }} ou {{ hauteurs[-1] }} cm de haut, la largeur suit son visage</span></div>
       <div><b>PVC expansé 3 mm</b><span>Rigide, léger, résistant à l'eau</span></div>
-      <div><b>Impression couleur</b><span>Haute définition, au recto</span></div>
-      <div><b>Découpe à la forme</b><span>Au contour du visage et des cheveux</span></div>
+      <div><b>Découpe à la forme</b><span>Impression couleur haute définition, au contour du visage</span></div>
+      <div><b>1, 2 ou 3 exemplaires</b><span>Du même visage, dans le même colis</span></div>
     </div>
   </div>
 </section>
@@ -191,13 +197,14 @@
         <div>
           <h2>Une photo, un prix clair.</h2>
           <p style="margin-top:14px;">Détourage, impression, découpe et
-            expédition sont compris. Tu ne paies qu'après avoir vu l'aperçu,
-            et rien ne t'y oblige.</p>
+            expédition sont compris. La deuxième et la troisième tête coûtent
+            à peine plus que la première. Tu ne paies qu'après avoir vu
+            l'aperçu, et rien ne t'y oblige.</p>
           <a class="action" href="/creer">Créer une grosse tête</a>
         </div>
         <div style="text-align:right;">
           <p style="margin-bottom:6px;">À partir de</p>
-          <div class="montant">{{ "%.0f"|format(plancher) }}<small> €</small></div>
+          <div class="montant">{{ plancher|int }}<small>,{{ "%02d"|format(((plancher - plancher|int) * 100)|round|int) }} €</small></div>
           <p style="margin-top:10px;">Expédiée {{ delai }}</p>
         </div>
       </div>
@@ -212,10 +219,11 @@
       <div>
         <span class="etiquette">Famille, club, collègues</span>
         <h2>Toute la bande sera au bord du parcours&nbsp;?</h2>
-        <p style="margin-top:16px;">Commande plusieurs exemplaires du même
-          visage en une seule fois. Chaque exemplaire après le premier coûte
-          {{ (remise * 100)|round|int }} % de moins, et tout arrive dans le
-          même colis. Chacun pourra se poster à un endroit différent du
+        <p style="margin-top:16px;">Commande jusqu'à trois exemplaires du même
+          visage en une seule fois. La deuxième et la troisième tête coûtent
+          bien moins cher que la première : à trois, chaque tête revient
+          jusqu'à {{ economie }} % moins cher qu'à l'unité. Tout arrive dans le
+          même colis, et chacun pourra se poster à un endroit différent du
           parcours.</p>
       </div>
       <div>
@@ -290,9 +298,9 @@
       </details>
       <details>
         <summary>Puis-je commander plusieurs têtes différentes&nbsp;?</summary>
-        <p>Oui. Crée la première, puis recommence avec une autre photo. Pour
-          plusieurs exemplaires du même visage, chaque exemplaire après le
-          premier coûte {{ (remise * 100)|round|int }} % de moins.</p>
+        <p>Oui. Crée la première, puis recommence avec une autre photo. Pour le
+          même visage, tu peux commander jusqu'à trois exemplaires, et chaque
+          tête revient alors jusqu'à {{ economie }} % moins cher.</p>
       </details>
       <details>
         <summary>Vous livrez où&nbsp;?</summary>

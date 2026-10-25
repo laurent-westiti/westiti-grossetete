@@ -17,7 +17,7 @@
   // La forme du panneau dans la toile.
   var forme = { cx: W / 2, cy: 450, rx: 290, ry: 350, marge: 16 };
 
-  var etat = { image: null, zoom: 1, x: 0, y: 0, quantite: 1 };
+  var etat = { image: null, zoom: 1, x: 0, y: 0 };
 
   var champ = function (id) { return document.getElementById(id); };
   var entree = champ('photo'), depot = champ('depot');
@@ -172,6 +172,11 @@
     return texte + ' €';
   }
 
+  function quantiteChoisie() {
+    var r = document.querySelector('input[name=quantite]:checked');
+    return r ? parseInt(r.value, 10) : 1;
+  }
+
   function tailleChoisie() {
     var r = document.querySelector('input[name=taille]:checked');
     return r ? r.value : null;
@@ -184,10 +189,22 @@
       d.hidden = d.getAttribute('data-taille') !== t;
     });
     champ('r-taille').textContent = info ? info.hauteur + ' cm' : '—';
-    champ('r-quantite').textContent = etat.quantite;
-    champ('nombre').textContent = etat.quantite;
-    champ('champ-quantite').value = etat.quantite;
-    var total = info ? info.prix + (etat.quantite - 1) * info.prix * (1 - C.remise) : 0;
+    var q = quantiteChoisie();
+    champ('r-quantite').textContent = q;
+    var total = info ? info.prix[q] : 0;
+
+    // Les cartes de quantité affichent les prix de la taille choisie.
+    if (info) {
+      [1, 2, 3].forEach(function (n) {
+        var t = document.querySelector('[data-q="' + n + '"]');
+        var g = document.querySelector('[data-gain="' + n + '"]');
+        if (t) t.textContent = euros(info.prix[n]);
+        if (g && n > 1) {
+          g.innerHTML = 'La ' + n + '<sup>e</sup> pour +' + euros(info.prix[n] - info.prix[n - 1])
+            + ', soit ' + euros(info.prix[n] / n) + ' la tête';
+        }
+      });
+    }
     champ('r-total').textContent = info ? euros(total) : '—';
 
     var prete = etat.image && info && accord.checked;
@@ -199,7 +216,7 @@
     champ('m-manque').textContent = !etat.image ? 'Ajoute une photo'
       : !info ? 'Choisis une taille'
       : !accord.checked ? 'Confirme l\'accord'
-      : etat.quantite + ' × ' + info.hauteur + ' cm';
+      : q + ' × ' + info.hauteur + ' cm';
     manque.textContent = !etat.image ? 'Ajoute une photo pour continuer.'
       : !info ? 'Choisis une taille pour continuer.'
       : !accord.checked ? 'Confirme l\'accord de la personne pour continuer.'
@@ -210,11 +227,8 @@
     r.addEventListener('change', mettreAJour);
   });
   accord.addEventListener('change', mettreAJour);
-  champ('moins').addEventListener('click', function () {
-    etat.quantite = Math.max(1, etat.quantite - 1); mettreAJour();
-  });
-  champ('plus').addEventListener('click', function () {
-    etat.quantite = Math.min(C.quantiteMax, etat.quantite + 1); mettreAJour();
+  document.querySelectorAll('input[name=quantite]').forEach(function (r) {
+    r.addEventListener('change', mettreAJour);
   });
 
   champ('formulaire').addEventListener('submit', function () {
