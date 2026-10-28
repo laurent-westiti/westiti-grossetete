@@ -107,10 +107,36 @@ a { color: var(--vert); text-underline-offset: 3px; }
 @media (max-width: 560px) { .marque img { height: 42px; } }
 
 .entete nav { display: flex; align-items: center; gap: 22px; }
-.entete nav a:not(.action) { color: var(--gris); text-decoration: none; font-size: 15.5px; }
-.entete nav a:not(.action):hover { color: var(--encre); }
+.entete nav > a:not(.action) { color: var(--gris); text-decoration: none; font-size: 15.5px; }
+.entete nav > a:not(.action):hover { color: var(--encre); }
 .entete .action { padding: 11px 20px; font-size: 15.5px; box-shadow: none; }
-@media (max-width: 760px) { .entete nav a:not(.action) { display: none; } }
+.entete .action .court { display: none; }
+/* Les liens de menu s'effacent avant que l'en-tête ne déborde : les
+   phrases espagnoles et anglaises sont plus longues que les françaises. */
+@media (max-width: 1080px) { .entete nav > a:not(.action) { display: none; } }
+@media (max-width: 560px) {
+  .entete nav { gap: 12px; }
+  .entete .action { padding: 10px 16px; }
+  .entete .action .long { display: none; }
+  .entete .action .court { display: inline; }
+}
+
+/* Les trois drapeaux : de petits ronds, celui de la langue affichée cerclé
+   de vert, les autres légèrement atténués jusqu'au survol. */
+.langues { display: flex; align-items: center; gap: 7px; }
+.langues a {
+  position: relative; display: block; width: 26px; height: 26px; border-radius: 50%;
+  overflow: hidden; box-shadow: 0 0 0 1px rgba(12,26,24,.14);
+  opacity: .72; transition: opacity .14s ease, transform .14s ease, box-shadow .14s ease;
+}
+.langues a:hover { opacity: 1; transform: translateY(-1px) scale(1.06); }
+.langues a.actif { opacity: 1; box-shadow: 0 0 0 2px var(--blanc), 0 0 0 4px var(--vert); }
+.langues svg { display: block; width: 100%; height: 100%; }
+@media (max-width: 560px) { .langues { gap: 6px; } .langues a { width: 23px; height: 23px; } }
+.sr {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
 
 /* ---------------------------------------------------------------- héros */
 

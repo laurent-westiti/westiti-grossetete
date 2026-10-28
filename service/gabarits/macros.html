@@ -1,16 +1,16 @@
 {#
-  Petits éléments réutilisés d'une page à l'autre.
+  Petits éléments réutilisés d'une page à l'autre. Ils s'importent avec
+  « with context », pour avoir accès à t() et prix() dans la bonne langue.
 #}
 
-{# Un emplacement de photo, tant que la vraie photo n'est pas fournie. Pour
-   la poser, remplacer l'appel par <figure class="photo format-…"><img …></figure>. #}
-{% macro photo_a_venir(titre, detail, format="portrait") -%}
+{# Un emplacement de photo, tant que la vraie photo n'est pas fournie. #}
+{% macro photo_a_venir(detail, format="portrait") -%}
 <figure class="photo a-venir format-{{ format }}">
   <div>
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
       <rect x="3" y="6" width="18" height="14" rx="3"/><circle cx="12" cy="13" r="3.6"/><path d="M8.5 6l1.4-2.2h4.2L15.5 6"/>
     </svg>
-    <b>{{ titre }}</b>
+    <b>{{ t("commun.photo_a_venir") }}</b>
     <span>{{ detail }}</span>
   </div>
 </figure>
@@ -22,7 +22,7 @@
 {% set r = hauteur * 0.4 %}
 {% set cy = 74 - r + 6 %}
 <svg class="echelle" viewBox="18 -8 180 216" role="img"
-     aria-label="Une grosse tête de {{ hauteur }} cm tenue par une personne d'un mètre soixante-quinze">
+     aria-label="{{ t('echelle.aria', h=hauteur) }}">
   <line class="sol" x1="10" y1="200" x2="190" y2="200"/>
   <circle class="supporter" cx="70" cy="70" r="10"/>
   <rect class="supporter" x="56" y="83" width="28" height="62" rx="11"/>
@@ -34,24 +34,41 @@
   <path class="visage" d="M{{ 110 - r*0.38 }} {{ cy + r*0.22 }} Q110 {{ cy + r*0.62 }} {{ 110 + r*0.38 }} {{ cy + r*0.22 }}" stroke="#fff" stroke-width="{{ [r*0.1, 2]|max }}" fill="none" stroke-linecap="round"/>
   <circle cx="{{ 110 - r*0.3 }}" cy="{{ cy - r*0.18 }}" r="{{ [r*0.08, 1.6]|max }}" fill="#fff"/>
   <circle cx="{{ 110 + r*0.3 }}" cy="{{ cy - r*0.18 }}" r="{{ [r*0.08, 1.6]|max }}" fill="#fff"/>
-  <text x="40" y="196" text-anchor="end">1,75 m</text>
+  <text x="40" y="196" text-anchor="end">{{ t("echelle.personne") }}</text>
   <text x="{{ 110 + r*0.84 + 8 }}" y="{{ cy + 4 }}">{{ hauteur }} cm</text>
 </svg>
 {%- endmacro %}
 
-{% macro euros(montant) -%}
-{%- set m = montant|round(2) -%}
-{%- if m == m|round(0) -%}{{ "%.0f"|format(m) }}{%- else -%}{{ ("%.2f"|format(m)).replace(".", ",") }}{%- endif %} €
+{# Les trois prix d'une taille, avec ce que coûte chaque tête en plus. #}
+{% macro grille_prix(t_) -%}
+<div class="grille-prix">
+  <div class="ligne"><span>{{ t("grille.une") }}</span><b>{{ prix(t_.prix[1]) }}</b></div>
+  <div class="ligne"><span>{{ t("grille.plusieurs", n=2) }}</span><b>{{ prix(t_.prix[2]) }}</b>
+    <small>{{ t("grille.deux", plus=prix(t_.prix[2] - t_.prix[1])) }}</small></div>
+  <div class="ligne"><span>{{ t("grille.plusieurs", n=3) }}</span><b>{{ prix(t_.prix[3]) }}</b>
+    <small>{{ t("grille.trois", plus=prix(t_.prix[3] - t_.prix[2]), unite=prix(t_.prix[3] / 3)) }}</small></div>
+</div>
 {%- endmacro %}
 
+{# Les trois drapeaux du menu. Dessinés ici plutôt qu'en émoji, parce que
+   Windows affiche les émojis de drapeaux sous forme de deux lettres. #}
+{% macro drapeau(l) -%}
+{%- if l == "fr" -%}
+<svg viewBox="0 0 3 2" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="1" height="2" fill="#0055A4"/><rect x="1" width="1" height="2" fill="#fff"/><rect x="2" width="1" height="2" fill="#EF4135"/></svg>
+{%- elif l == "es" -%}
+<svg viewBox="0 0 3 2" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="3" height="2" fill="#AA151B"/><rect y=".5" width="3" height="1" fill="#F1BF00"/></svg>
+{%- else -%}
+<svg viewBox="0 0 60 30" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><clipPath id="drapeau-uk-t"><path d="M30,15h30v15zv15h-30zh-30v-15zv-15h30z"/></clipPath><rect width="60" height="30" fill="#012169"/><path d="M0,0L60,30M60,0L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0L60,30M60,0L0,30" clip-path="url(#drapeau-uk-t)" stroke="#C8102E" stroke-width="4"/><path d="M30,0v30M0,15h60" stroke="#fff" stroke-width="10"/><path d="M30,0v30M0,15h60" stroke="#C8102E" stroke-width="6"/></svg>
+{%- endif -%}
+{%- endmacro %}
 
-{# Les trois prix d'une taille, avec ce que coûte chaque tête en plus. #}
-{% macro grille_prix(t) -%}
-<div class="grille-prix">
-  <div class="ligne"><span>1 tête</span><b>{{ euros(t.prix[1]) }}</b></div>
-  <div class="ligne"><span>2 têtes</span><b>{{ euros(t.prix[2]) }}</b>
-    <small>la 2<sup>e</sup> pour +{{ euros(t.prix[2] - t.prix[1]) }}</small></div>
-  <div class="ligne"><span>3 têtes</span><b>{{ euros(t.prix[3]) }}</b>
-    <small>la 3<sup>e</sup> pour +{{ euros(t.prix[3] - t.prix[2]) }}, soit {{ euros((t.prix[3] / 3)|round(2)) }} la tête</small></div>
+{% macro langues_menu() -%}
+<div class="langues" role="group" aria-label="{{ t('nav.langue') }}">
+  {% for l in langues %}
+  <a href="{{ urls_langues[l] }}" hreflang="{{ l }}" lang="{{ l }}" title="{{ noms_langues[l] }}"
+     {% if l == lang %}aria-current="true" class="actif"{% endif %}>
+    {{ drapeau(l) }}<span class="sr">{{ noms_langues[l] }}</span>
+  </a>
+  {% endfor %}
 </div>
 {%- endmacro %}

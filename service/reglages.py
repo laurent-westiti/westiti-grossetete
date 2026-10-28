@@ -20,25 +20,22 @@ PRODUCTION = os.environ.get("WG_PRODUCTION") == "1"
 # Hauteur du panneau en centimètres, et prix TTC en euros de la commande
 # selon le nombre d'exemplaires du même visage (1, 2 ou 3). Les deuxième et
 # troisième exemplaires coûtent bien moins cher que le premier : c'est
-# l'argument des commandes familiales. La clé sert d'identifiant dans les formulaires.
+# l'argument des commandes familiales. La clé sert d'identifiant dans les
+# formulaires. Les noms des tailles sont dans traductions.py.
 TAILLES = {
-    "30":  {"hauteur": 30,  "nom": "Compacte",           "pour": "Légère et facile à glisser dans un sac, idéale pour les enfants.",
-            "prix": {1: 49, 2: 54, 3: 59}},
-    "45":  {"hauteur": 45,  "nom": "Visible",            "pour": "Facile à tenir à bout de bras, même sur un long parcours.",
-            "prix": {1: 52, 2: 59, 3: 64}},
-    "60":  {"hauteur": 60,  "nom": "Repérable",          "pour": "Le bon compromis : elle se voit de loin et se transporte sans peine.",
-            "prix": {1: 59, 2: 69, 3: 79}},
-    "80":  {"hauteur": 80,  "nom": "Impossible à rater", "pour": "Pour les arrivées, les ravitos et les virages où toute la foule se masse.",
-            "prix": {1: 64, 2: 84, 3: 99}},
-    "100": {"hauteur": 100, "nom": "Géante",             "pour": "Un mètre de haut : elle dépasse toutes les têtes de la foule.",
-            "prix": {1: 124, 2: 159, 3: 199}},
+    "30":  {"hauteur": 30,  "prix": {1: 49, 2: 54, 3: 59}},
+    "45":  {"hauteur": 45,  "prix": {1: 52, 2: 59, 3: 64}},
+    "60":  {"hauteur": 60,  "prix": {1: 59, 2: 69, 3: 79}},
+    "80":  {"hauteur": 80,  "prix": {1: 64, 2: 84, 3: 99}},
+    "100": {"hauteur": 100, "prix": {1: 124, 2: 159, 3: 199}},
 }
 TAILLE_CONSEILLEE = "60"
 QUANTITES = (1, 2, 3)
 QUANTITE_MAX = max(QUANTITES)
 
 LIVRAISON_OFFERTE = True
-DELAI_EXPEDITION = "sous 4 jours ouvrés"
+# Jours ouvrés entre la commande et l'expédition (phrase dans traductions.py).
+DELAI_JOURS = 4
 
 
 def prix_commande(taille: str, quantite: int) -> float:

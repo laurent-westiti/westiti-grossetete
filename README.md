@@ -12,12 +12,22 @@ Memories.
 | `service/statique/` | La feuille de style commune et l'aperçu en direct (`creer.js`) |
 | `site/img/` | Les images. Les emplacements « Photo à venir » attendent de vraies photos |
 
+## Langues
+
+Le site existe en français (`/`), en anglais (`/en`) et en espagnol (`/es`).
+Trois drapeaux dans l'en-tête permettent de passer d'une langue à l'autre
+sur n'importe quelle page. Les adresses des pages sont traduites
+(`/creer`, `/en/create`, `/es/crear`…), et tous les textes vivent dans
+`service/traductions.py`, une phrase par clé dans les trois langues. Le
+service refuse de démarrer si une traduction manque.
+
 ## Où changer quoi
 
 | Pour changer… | Fichier |
 |---|---|
+| Un texte, dans n'importe quelle langue | `service/traductions.py` |
 | Les tailles, les prix, le délai | `service/reglages.py` |
-| Les textes de la page d'accueil | `service/gabarits/accueil.html` |
+| La mise en page de l'accueil | `service/gabarits/accueil.html` |
 | Les couleurs | `service/statique/westiti.css`, en tête de fichier |
 
 Grille tarifaire (TTC, pour 1, 2 ou 3 exemplaires du même visage) :

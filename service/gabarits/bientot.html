@@ -1,16 +1,15 @@
 {% extends "base.html" %}
-{% block titre %}Presque prêt — Westiti Grosse Tête{% endblock %}
+{% block titre %}{{ t("bientot.titre_page") }} — Westiti{% endblock %}
 {% block corps %}
 <section class="message papier">
   <div class="page">
-    <h1>Ta grosse tête est prête, le paiement pas encore.</h1>
-    <p>Nous ouvrons les commandes dans quelques jours. Ta photo n'a pas été
-      conservée : il te suffira de revenir et de recommencer, cela prend une
-      minute.</p>
-    <p class="aide">Récapitulatif de ton choix : {{ taille }} cm,
-      {{ quantite }} exemplaire{% if quantite > 1 %}s{% endif %}, soit
-      {{ total }} au total.</p>
-    <a class="action" href="/creer">Revenir à l'atelier</a>
+    <h1>{{ t("bientot.h1") }}</h1>
+    <p>{{ t("bientot.texte") }}</p>
+    <p class="aide">{{ t("bientot.recap",
+        taille='<span id="b-t">%s</span>'|format(taille)|safe,
+        quantite='<span id="b-q">%s</span>'|format(quantite)|safe,
+        total='<span id="b-tot">%s</span>'|format(total)|safe) }}</p>
+    <a class="action" href="{{ url('creer') }}">{{ t("bientot.retour") }}</a>
   </div>
 </section>
 {% endblock %}

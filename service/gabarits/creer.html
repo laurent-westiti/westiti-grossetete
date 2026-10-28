@@ -1,7 +1,7 @@
 {% extends "base.html" %}
-{% from "macros.html" import echelle, euros %}
-{% block titre %}Créer ma grosse tête — Westiti Grosse Tête{% endblock %}
-{% block entete_droite %}<a href="/" style="color:var(--gris); text-decoration:none; font-size:15.5px;">Retour à l'accueil</a>{% endblock %}
+{% from "macros.html" import echelle with context %}
+{% block titre %}{{ t("creer.titre_page") }} — Westiti{% endblock %}
+{% block entete_liens %}<a href="{{ url('accueil') }}">{{ t("nav.retour") }}</a>{% endblock %}
 
 {% block corps %}
 <section class="atelier">
@@ -9,9 +9,9 @@
 
     <!-- ==================================================== le formulaire -->
     <form id="formulaire" method="post" action="/commander" enctype="multipart/form-data" novalidate>
-      <h1>Créer ma grosse tête</h1>
-      <p class="doux" style="margin-top:12px; font-size:18px;">Trois étapes, et
-        l'aperçu se met à jour à chaque choix. Tu ne paies qu'à la fin.</p>
+      <input type="hidden" name="langue" value="{{ lang }}">
+      <h1>{{ t("creer.h1") }}</h1>
+      <p class="doux" style="margin-top:12px; font-size:18px;">{{ t("creer.intro") }}</p>
 
       {% if erreur %}
       <div class="avis probleme" style="margin-top:20px;">{{ erreur }}</div>
@@ -19,9 +19,8 @@
 
       <!-- 1. La photo -->
       <section class="etape-form">
-        <header><i>1</i><h2>Sa photo</h2></header>
-        <p class="aide" style="margin:0;">Une photo nette de son visage, prise
-          au téléphone. Inutile de la détourer, nous nous en chargeons.</p>
+        <header><i>1</i><h2>{{ t("creer.photo_t") }}</h2></header>
+        <p class="aide" style="margin:0;">{{ t("creer.photo_aide") }}</p>
 
         <label class="depot" id="depot" for="photo">
           <input id="photo" name="photo" type="file" accept="image/jpeg,image/png,image/heic,image/webp" required>
@@ -29,22 +28,21 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
               <path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/>
             </svg>
-            <b id="depot-titre">Choisir une photo</b>
-            <span class="aide" id="depot-detail">ou la glisser ici — JPEG, PNG ou HEIC, {{ photo_max }} Mo au plus</span>
+            <b id="depot-titre">{{ t("creer.choisir") }}</b>
+            <span class="aide" id="depot-detail">{{ t("creer.glisser", mo=photo_max) }}</span>
           </div>
         </label>
 
         <div class="conseils">
-          <div><b>Nette et bien éclairée</b>La lumière du jour donne le meilleur résultat.</div>
-          <div><b>Le visage en grand</b>Il doit occuper une bonne partie de la photo.</div>
-          <div><b>Sans lunettes de soleil</b>Les yeux font toute la ressemblance.</div>
+          {% for n in range(1, 4) %}
+          <div><b>{{ t("creer.c%d_b" % n) }}</b>{{ t("creer.c%d" % n) }}</div>
+          {% endfor %}
         </div>
 
         <div class="recadrer" id="recadrer">
-          <label for="zoom">Recadrer le visage</label>
+          <label for="zoom">{{ t("creer.recadrer") }}</label>
           <input id="zoom" type="range" min="1" max="3" step="0.01" value="1">
-          <p class="aide" style="margin:6px 0 0;">Fais glisser la photo dans
-            l'aperçu pour la centrer, et ajuste le zoom ici.</p>
+          <p class="aide" style="margin:6px 0 0;">{{ t("creer.recadrer_aide") }}</p>
         </div>
         <input type="hidden" name="zoom" id="champ-zoom" value="1">
         <input type="hidden" name="decalage_x" id="champ-x" value="0">
@@ -53,16 +51,15 @@
 
       <!-- 2. La taille -->
       <section class="etape-form">
-        <header><i>2</i><h2>La taille</h2></header>
-        <p class="aide" style="margin:0;">La hauteur du panneau, du haut des
-          cheveux au menton. La largeur suit la forme du visage.</p>
+        <header><i>2</i><h2>{{ t("creer.taille_t") }}</h2></header>
+        <p class="aide" style="margin:0;">{{ t("creer.taille_aide") }}</p>
         <div class="choix-tailles">
-          {% for cle, t in tailles.items() %}
+          {% for cle, taille in tailles.items() %}
           <label>
             <input type="radio" name="taille" value="{{ cle }}" {% if cle == choix_taille %}checked{% endif %}>
-            <span class="mesure">{{ t.hauteur }} cm</span>
-            <span class="nom">{{ t.nom }}</span>
-            <span class="tarif">dès {{ euros(t.prix[1]) }}</span>
+            <span class="mesure">{{ taille.hauteur }} cm</span>
+            <span class="nom">{{ t("taille.%s.nom" % cle) }}</span>
+            <span class="tarif">{{ t("creer.des", prix=prix(taille.prix[1])) }}</span>
           </label>
           {% endfor %}
         </div>
@@ -70,28 +67,24 @@
 
       <!-- 3. La quantité -->
       <section class="etape-form">
-        <header><i>3</i><h2>Combien d'exemplaires&nbsp;?</h2></header>
-        <p class="aide" style="margin:0;">Le même visage, en 1, 2 ou 3
-          exemplaires. La deuxième et la troisième tête coûtent bien moins cher
-          que la première, pratique quand toute la famille se répartit le long
-          du parcours.</p>
+        <header><i>3</i><h2>{{ t("creer.quantite_t") }}</h2></header>
+        <p class="aide" style="margin:0;">{{ t("creer.quantite_aide") }}</p>
         {% set t0 = tailles[choix_taille] %}
         <div class="choix-quantites">
           {% for q in quantites %}
           <label>
             <input type="radio" name="quantite" value="{{ q }}" {% if q == choix_quantite %}checked{% endif %}>
-            {% if q == 3 %}<span class="badge">Meilleur prix par tête</span>{% endif %}
-            <span class="combien">{{ q }} tête{% if q > 1 %}s{% endif %}</span>
-            <span class="total" data-q="{{ q }}">{{ euros(t0.prix[q]) }}</span>
-            <span class="gain" data-gain="{{ q }}">{% if q == 1 %}Prix à l'unité{% else %}La {{ q }}<sup>e</sup> pour +{{ euros(t0.prix[q] - t0.prix[q - 1]) }}, soit {{ euros((t0.prix[q] / q)|round(2)) }} la tête{% endif %}</span>
+            {% if q == 3 %}<span class="badge">{{ t("creer.meilleur") }}</span>{% endif %}
+            <span class="combien">{{ t("grille.une") if q == 1 else t("grille.plusieurs", n=q) }}</span>
+            <span class="total" data-q="{{ q }}">{{ prix(t0.prix[q]) }}</span>
+            <span class="gain" data-gain="{{ q }}">{% if q == 1 %}{{ t("creer.unite") }}{% else %}{{ t("creer.gain%d" % q, plus=prix(t0.prix[q] - t0.prix[q - 1]), unite=prix(t0.prix[q] / q)) }}{% endif %}</span>
           </label>
           {% endfor %}
         </div>
 
         <label class="accord">
           <input type="checkbox" name="accord" id="accord" value="oui" required>
-          <span>Je confirme avoir l'accord de la personne représentée pour
-            faire imprimer son visage.</span>
+          <span>{{ t("creer.accord") }}</span>
         </label>
       </section>
     </form>
@@ -100,31 +93,28 @@
     <aside class="apercu-col">
       <div class="apercu-carte">
         <div class="scene">
-          <span class="legende" id="legende">Ton aperçu apparaîtra ici</span>
+          <span class="legende" id="legende">{{ t("creer.legende_vide") }}</span>
           <canvas id="toile" class="vide" width="840" height="880"
-                  aria-label="Aperçu de la grosse tête"></canvas>
+                  aria-label="{{ t('creer.toile_aria') }}"></canvas>
         </div>
         <div class="recap">
           <div id="echelles" aria-hidden="true" style="margin:-4px 0 14px;">
-            {% for cle, t in tailles.items() %}
-            <div data-taille="{{ cle }}" {% if cle != choix_taille %}hidden{% endif %}>{{ echelle(t.hauteur) }}</div>
+            {% for cle, taille in tailles.items() %}
+            <div data-taille="{{ cle }}" {% if cle != choix_taille %}hidden{% endif %}>{{ echelle(taille.hauteur) }}</div>
             {% endfor %}
           </div>
           <dl>
-            <dt>Taille</dt><dd id="r-taille">—</dd>
-            <dt>Exemplaires</dt><dd id="r-quantite">1</dd>
-            <dt>Livraison</dt><dd>{% if livraison_offerte %}Offerte{% else %}Calculée à l'étape suivante{% endif %}</dd>
-            <dt class="total">Total</dt><dd class="total" id="r-total">—</dd>
+            <dt>{{ t("creer.r_taille") }}</dt><dd id="r-taille">—</dd>
+            <dt>{{ t("creer.r_ex") }}</dt><dd id="r-quantite">1</dd>
+            <dt>{{ t("creer.r_livraison") }}</dt><dd>{% if livraison_offerte %}{{ t("creer.offerte") }}{% else %}{{ t("creer.calculee") }}{% endif %}</dd>
+            <dt class="total">{{ t("creer.total") }}</dt><dd class="total" id="r-total">—</dd>
           </dl>
-          <button class="action" type="submit" form="formulaire" id="commander" disabled>Commander</button>
-          <p class="aide" id="manque">Ajoute une photo pour continuer.</p>
-          <p class="aide" style="margin-top:6px;">Paiement sur une page sécurisée
-            de Stripe. Expédiée {{ delai }}.</p>
+          <button class="action" type="submit" form="formulaire" id="commander" disabled>{{ t("js.commander") }}</button>
+          <p class="aide" id="manque">{{ t("js.manque_photo") }}</p>
+          <p class="aide" style="margin-top:6px;">{{ t("creer.paiement", expediee=expediee) }}</p>
         </div>
       </div>
-      <p class="aide" style="margin-top:14px; text-align:center;">L'aperçu montre
-        le cadrage. Le détourage précis, au contour des cheveux, est réalisé
-        avant l'impression.</p>
+      <p class="aide" style="margin-top:14px; text-align:center;">{{ t("creer.note") }}</p>
     </aside>
 
   </div>
@@ -135,18 +125,20 @@
 <div class="barre-mobile">
   <div>
     <b id="m-total">—</b>
-    <span class="aide" id="m-manque">Ajoute une photo</span>
+    <span class="aide" id="m-manque">{{ t("js.m_photo") }}</span>
   </div>
-  <button class="action" type="submit" form="formulaire" id="m-commander" disabled>Commander</button>
+  <button class="action" type="submit" form="formulaire" id="m-commander" disabled>{{ t("js.commander") }}</button>
 </div>
 {% endblock %}
 
 {% block scripts %}
 <script>
   window.GROSSE_TETE = {
+    langue: "{{ lang }}",
     tailles: {{ tailles_json|safe }},
+    textes: {{ textes_json|safe }},
     photoMaxMo: {{ photo_max }}
   };
 </script>
-<script src="/statique/creer.js?v=2"></script>
+<script src="/statique/creer.js?v=3"></script>
 {% endblock %}

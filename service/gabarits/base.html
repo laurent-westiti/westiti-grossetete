@@ -1,38 +1,45 @@
 {#
-  Ossature commune de toutes les pages de Westiti Grosse Tête.
+  Ossature commune de toutes les pages de Westiti Grosse Tête, dans les
+  trois langues.
 #}
+{% from "macros.html" import langues_menu with context %}
 <!doctype html>
-<html lang="fr">
+<html lang="{{ lang }}">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{% block titre %}Westiti Grosse Tête{% endblock %}</title>
-<meta name="description" content="{% block description %}Sa tête en géant, découpée à la forme de son visage, pour l'encourager au bord du parcours. Une photo suffit, nous imprimons et livrons.{% endblock %}">
+<title>{% block titre %}{{ t("meta.titre") }}{% endblock %}</title>
+<meta name="description" content="{{ t('meta.description') }}">
 <meta name="color-scheme" content="light">
+{# Les moteurs de recherche apprennent ainsi que la page existe en trois langues. #}
+{% for l in langues %}<link rel="alternate" hreflang="{{ l }}" href="{{ adresse }}{{ urls_langues[l] }}">
+{% endfor %}<link rel="alternate" hreflang="x-default" href="{{ adresse }}{{ urls_langues['fr'] }}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gabarito:wght@400;600;700;900&family=Instrument+Serif:ital@0;1&display=swap">
-<link rel="stylesheet" href="/statique/westiti.css?v=3">
+<link rel="stylesheet" href="/statique/westiti.css?v=4">
 <link rel="icon" type="image/png" href="/img/favicon.png">
 <meta property="og:image" content="/img/logo.png">
+<meta property="og:locale" content="{{ {'fr': 'fr_FR', 'en': 'en_GB', 'es': 'es_ES'}[lang] }}">
 {% block tete %}{% endblock %}
 </head>
 <body>
 
 <header class="entete">
   <div class="page">
-    <a class="marque" href="/" aria-label="Westiti Grosse Tête, accueil">
+    <a class="marque" href="{{ url('accueil') }}" aria-label="{{ t('nav.accueil_aria') }}">
       <img src="/img/logo.png" alt="" width="600" height="292">
     </a>
-    {% block entete_droite %}
     <nav>
-      <a href="/#grosse-tete">La grosse tête</a>
-      <a href="/#tailles">Les tailles</a>
-      <a href="/#comment">Comment ça marche</a>
-      <a href="/#questions">Questions</a>
-      <a class="action" href="/creer">Créer une grosse tête</a>
+      {% block entete_liens %}
+      <a href="{{ url('accueil') }}#grosse-tete">{{ t("nav.grosse_tete") }}</a>
+      <a href="{{ url('accueil') }}#tailles">{{ t("nav.tailles") }}</a>
+      <a href="{{ url('accueil') }}#comment">{{ t("nav.comment") }}</a>
+      <a href="{{ url('accueil') }}#questions">{{ t("nav.questions") }}</a>
+      <a class="action" href="{{ url('creer') }}"><span class="long">{{ t("nav.cta") }}</span><span class="court">{{ t("nav.cta_court") }}</span></a>
+      {% endblock %}
+      {{ langues_menu() }}
     </nav>
-    {% endblock %}
   </div>
 </header>
 
@@ -42,24 +49,25 @@
 
 <footer class="pied">
   <div class="page">
-    <span>Westiti Grosse Tête — une création <a href="https://westiti.app">Westiti</a></span>
+    <span>{{ t("pied.creation", lien=('<a href="https://westiti.app">Westiti</a>'|safe)) }}</span>
     <nav>
-      <a href="/cgv">Conditions de vente</a>
-      <a href="/mentions-legales">Mentions légales</a>
-      <a href="/confidentialite">Confidentialité</a>
-      <a href="mailto:contact@westiti.app">Contact</a>
+      <a href="{{ url('cgv') }}">{{ t("pied.cgv") }}</a>
+      <a href="{{ url('mentions-legales') }}">{{ t("pied.mentions") }}</a>
+      <a href="{{ url('confidentialite') }}">{{ t("pied.confidentialite") }}</a>
+      <a href="mailto:contact@westiti.app">{{ t("pied.contact") }}</a>
     </nav>
   </div>
 </footer>
 
 <script>
-  // Le clic sur un bouton doit se voir avant que la page suivante n'arrive.
+  // Le clic sur un bouton de création doit se voir avant que la page
+  // suivante n'arrive.
   (function () {
     var fil = document.createElement('div');
     fil.className = 'fil';
     document.body.appendChild(fil);
     document.addEventListener('click', function (e) {
-      var lien = e.target.closest('a[href="/creer"]');
+      var lien = e.target.closest('a[href="{{ url('creer') }}"]');
       if (!lien || e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
       requestAnimationFrame(function () { fil.classList.add('part'); });
     });

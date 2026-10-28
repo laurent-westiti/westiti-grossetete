@@ -1,12 +1,10 @@
 {% extends "base.html" %}
-{% block titre %}{{ titre_page }} — Westiti Grosse Tête{% endblock %}
+{% block titre %}{{ titre_page }} — Westiti{% endblock %}
 {% block corps %}
 <section class="texte-legal">
   <div class="page">
     <h1 style="font-size:clamp(32px,4vw,46px);">{{ titre_page }}</h1>
-    <div class="avis probleme" style="margin-top:24px;">Ce texte est en cours
-      de rédaction et sera validé par notre conseil avant l'ouverture des
-      commandes.</div>
+    <div class="avis probleme" style="margin-top:24px;">{{ t("legal.en_cours") }}</div>
     {% for intertitre, paragraphe in sections %}
     <h2>{{ intertitre }}</h2>
     <p>{{ paragraphe }}</p>

@@ -1,15 +1,13 @@
 {% extends "base.html" %}
-{% block titre %}Merci — Westiti Grosse Tête{% endblock %}
+{% block titre %}{{ t("merci.titre_page") }} — Westiti{% endblock %}
 {% block corps %}
 <section class="message sombre">
   <div class="page">
-    <p class="emotion" style="margin:0 auto 18px; max-width:none;"><i>Commande reçue.</i></p>
-    <h1>Sa grosse tête part en fabrication.</h1>
-    <p>Tu viens de recevoir la confirmation et la facture par courriel. Nous
-      t'écrirons de nouveau au moment de l'expédition, avec le numéro de
-      suivi du colis.</p>
-    <p>Il ne te reste plus qu'à repérer le meilleur endroit du parcours.</p>
-    <a class="action" href="/">Retour à l'accueil</a>
+    <p class="emotion" style="margin:0 auto 18px; max-width:none;"><i>{{ t("merci.emotion") }}</i></p>
+    <h1>{{ t("merci.h1") }}</h1>
+    <p>{{ t("merci.p1") }}</p>
+    <p>{{ t("merci.p2") }}</p>
+    <a class="action" href="{{ url('accueil') }}">{{ t("merci.retour") }}</a>
   </div>
 </section>
 {% endblock %}

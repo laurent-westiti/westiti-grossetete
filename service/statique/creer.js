@@ -10,6 +10,16 @@
 */
 (function () {
   var C = window.GROSSE_TETE;
+
+  // Les textes viennent de la page, dans sa langue. Les {accolades} sont
+  // remplacées par les valeurs données.
+  function T(cle, valeurs) {
+    var texte = C.textes[cle] || '';
+    Object.keys(valeurs || {}).forEach(function (k) {
+      texte = texte.split('{' + k + '}').join(valeurs[k]);
+    });
+    return texte;
+  }
   var toile = document.getElementById('toile');
   var ctx = toile.getContext('2d');
   var W = toile.width, H = toile.height;
@@ -55,7 +65,7 @@
       ctx.stroke(); ctx.setLineDash([]);
       ctx.fillStyle = '#A9B5B1';
       ctx.font = '600 34px Gabarito, sans-serif'; ctx.textAlign = 'center';
-      ctx.fillText('Sa photo ici', forme.cx, forme.cy + 12);
+      ctx.fillText(T('photo_ici'), forme.cx, forme.cy + 12);
       return;
     }
 
@@ -90,7 +100,7 @@
   function charger(fichier) {
     if (!fichier) return;
     if (fichier.size > C.photoMaxMo * 1024 * 1024) {
-      signaler('Cette photo dépasse ' + C.photoMaxMo + ' Mo. Choisis-en une plus légère.');
+      signaler(T('trop_lourde', { mo: C.photoMaxMo }));
       return;
     }
     var url = URL.createObjectURL(fichier);
@@ -98,20 +108,20 @@
     img.onload = function () {
       etat.image = img; etat.zoom = 1; etat.x = 0; etat.y = 0; zoom.value = 1;
       toile.classList.remove('vide');
-      champ('legende').textContent = 'Fais glisser pour centrer le visage';
+      champ('legende').textContent = T('glisser');
       champ('recadrer').classList.add('visible');
       depot.classList.add('rempli');
       champ('depot-titre').textContent = fichier.name;
-      champ('depot-detail').textContent = 'Changer de photo';
+      champ('depot-detail').textContent = T('changer');
       if (img.width < 800 || img.height < 800) {
-        signaler('Cette photo est un peu petite : le visage risque d\'être flou une fois imprimé en grand. Une photo plus grande donnera un meilleur résultat.');
+        signaler(T('petite'));
       } else {
         signaler('');
       }
       dessiner(); mettreAJour();
     };
     img.onerror = function () {
-      signaler('Nous n\'arrivons pas à lire cette photo. Essaie avec un fichier JPEG ou PNG.');
+      signaler(T('illisible'));
     };
     img.src = url;
   }
@@ -166,10 +176,12 @@
 
   // ------------------------------------------------------- taille, prix
 
+  // 49 € et 19,67 € en français et en espagnol, €49 et €19.67 en anglais.
   function euros(n) {
     var arrondi = Math.round(n * 100) / 100;
-    var texte = arrondi % 1 === 0 ? String(arrondi) : arrondi.toFixed(2).replace('.', ',');
-    return texte + ' €';
+    var entier = Math.abs(arrondi - Math.round(arrondi)) < 0.005;
+    if (C.langue === 'en') return '€' + (entier ? Math.round(arrondi) : arrondi.toFixed(2));
+    return (entier ? String(Math.round(arrondi)) : arrondi.toFixed(2).replace('.', ',')) + ' €';
   }
 
   function quantiteChoisie() {
@@ -200,8 +212,9 @@
         var g = document.querySelector('[data-gain="' + n + '"]');
         if (t) t.textContent = euros(info.prix[n]);
         if (g && n > 1) {
-          g.innerHTML = 'La ' + n + '<sup>e</sup> pour +' + euros(info.prix[n] - info.prix[n - 1])
-            + ', soit ' + euros(info.prix[n] / n) + ' la tête';
+          g.innerHTML = T('gain' + n, {
+            plus: euros(info.prix[n] - info.prix[n - 1]), unite: euros(info.prix[n] / n)
+          });
         }
       });
     }
@@ -209,18 +222,18 @@
 
     var prete = etat.image && info && accord.checked;
     bouton.disabled = !prete;
-    bouton.textContent = prete ? 'Commander — ' + euros(total) : 'Commander';
+    bouton.textContent = prete ? T('commander_total', { total: euros(total) }) : T('commander');
     var mb = champ('m-commander');
     mb.disabled = !prete;
     champ('m-total').textContent = info ? euros(total) : '—';
-    champ('m-manque').textContent = !etat.image ? 'Ajoute une photo'
-      : !info ? 'Choisis une taille'
-      : !accord.checked ? 'Confirme l\'accord'
+    champ('m-manque').textContent = !etat.image ? T('m_photo')
+      : !info ? T('m_taille')
+      : !accord.checked ? T('m_accord')
       : q + ' × ' + info.hauteur + ' cm';
-    manque.textContent = !etat.image ? 'Ajoute une photo pour continuer.'
-      : !info ? 'Choisis une taille pour continuer.'
-      : !accord.checked ? 'Confirme l\'accord de la personne pour continuer.'
-      : 'Tout est prêt.';
+    manque.textContent = !etat.image ? T('manque_photo')
+      : !info ? T('manque_taille')
+      : !accord.checked ? T('manque_accord')
+      : T('pret');
   }
 
   document.querySelectorAll('input[name=taille]').forEach(function (r) {
@@ -233,7 +246,7 @@
 
   champ('formulaire').addEventListener('submit', function () {
     [bouton, champ('m-commander')].forEach(function (b) {
-      b.disabled = true; b.textContent = 'Un instant…';
+      b.disabled = true; b.textContent = T('instant');
     });
   });
 

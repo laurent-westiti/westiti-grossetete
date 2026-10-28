@@ -1,10 +1,9 @@
 {% extends "base.html" %}
-{% from "macros.html" import photo_a_venir, echelle, euros, grille_prix %}
+{% from "macros.html" import photo_a_venir, echelle, grille_prix with context %}
 {% set hauteurs = tailles.values()|map(attribute="hauteur")|list %}
-{% block titre %}Westiti Grosse Tête — sa tête en géant, pour l'encourager{% endblock %}
 {% block tete %}
-<meta property="og:title" content="Westiti Grosse Tête — sa tête en géant, pour l'encourager">
-<meta property="og:description" content="Une photo suffit. Nous détourons son visage, l'imprimons en grand sur un panneau rigide découpé à la forme, et te l'envoyons avant la course.">
+<meta property="og:title" content="{{ t('meta.titre') }}">
+<meta property="og:description" content="{{ t('meta.og') }}">
 {% endblock %}
 
 {% block corps %}
@@ -13,31 +12,27 @@
 <section class="heros">
   <div class="page">
     <div>
-      <p class="promesse">Marathon, semi, trail, ultra, triathlon</p>
-      <h1>Sa tête en géant,<br>pour l'encourager</h1>
-      <p class="emotion" style="margin-top:26px;">Voir son propre visage au milieu
-        de la foule lui apportera <i>réconfort</i> et <i>émotion</i>.</p>
+      <p class="promesse">{{ t("heros.promesse") }}</p>
+      <h1>{{ t("heros.titre") }}</h1>
+      <p class="emotion" style="margin-top:26px;">{{ t("heros.emotion") }}</p>
     </div>
     <div>
-      <p style="font-size:18.5px;">Tu nous envoies une photo,
-        nous détourons son visage et l'imprimons en grand sur un panneau rigide
-        découpé à sa forme. Tu le reçois chez toi avant la course, prêt à être
-        brandi là où le besoin sera le plus fort.</p>
+      <p style="font-size:18.5px;">{{ t("heros.texte") }}</p>
       <p style="margin-top:28px;">
-        <a class="action" href="/creer">Créer une grosse tête</a>
-        <a class="secondaire" href="#tailles">Voir les tailles</a>
+        <a class="action" href="{{ url('creer') }}">{{ t("nav.cta") }}</a>
+        <a class="secondaire" href="#tailles">{{ t("heros.voir_tailles") }}</a>
       </p>
       <div class="repere">
-        <b>Dès {{ euros(plancher) }}</b>
-        {% if livraison_offerte %}<span>Livraison offerte</span>{% endif %}
-        <span>Expédiée {{ delai }}</span>
+        <b>{{ t("heros.des", prix=prix(plancher)) }}</b>
+        {% if livraison_offerte %}<span>{{ t("commun.livraison_offerte") }}</span>{% endif %}
+        <span>{{ expediee }}</span>
       </div>
     </div>
 
     <figure class="banniere">
       <img src="/img/heros.jpg" srcset="/img/heros-1000.jpg 1000w, /img/heros.jpg 2000w"
            sizes="(max-width: 1240px) 100vw, 1200px" width="2000" height="815"
-           alt="Dans une tribune pleine de drapeaux français, des supporters brandissent quatre grosses têtes à l'effigie de leurs athlètes">
+           alt="{{ t('heros.alt') }}">
       <figcaption>(COUVERCELLE ANTOINE / KMSP / AFP)</figcaption>
     </figure>
   </div>
@@ -46,10 +41,10 @@
 <!-- ===================================================== confiance -->
 <section class="confiance">
   <div class="page">
-    <div><b>1 photo</b><span>suffit, prise avec un simple téléphone</span></div>
-    <div><b>{{ hauteurs|min }} à {{ hauteurs|max }} cm</b><span>de haut, pour se voir de loin</span></div>
-    <div><b>3 mm</b><span>de PVC rigide, qui ne craint pas la pluie</span></div>
-    <div><b>100 %</b><span>découpée au contour de son visage</span></div>
+    <div><b>{{ t("confiance.photo_b") }}</b><span>{{ t("confiance.photo") }}</span></div>
+    <div><b>{{ t("confiance.haut_b", min=hauteurs|min, max=hauteurs|max) }}</b><span>{{ t("confiance.haut") }}</span></div>
+    <div><b>{{ t("confiance.pvc_b") }}</b><span>{{ t("confiance.pvc") }}</span></div>
+    <div><b>{{ t("confiance.decoupe_b") }}</b><span>{{ t("confiance.decoupe") }}</span></div>
   </div>
 </section>
 
@@ -57,19 +52,12 @@
 <section class="bande sombre probleme">
   <div class="page">
     <div>
-      <h2>Au bord d'une course,<br>tout le monde crie.</h2>
-      <p class="emotion" style="margin-top:24px;">Une pancarte de plus
-        se perd dans la foule.<br><i>Un visage géant, jamais.</i></p>
+      <h2>{{ t("probleme.titre") }}</h2>
+      <p class="emotion" style="margin-top:24px;">{{ t("probleme.emotion") }}</p>
     </div>
     <div>
-      <p>Tu connais ce moment. Tu attends depuis une heure, les coureurs
-        passent par centaines, et la personne pour qui tu es là file devant
-        toi sans te voir. Elle a la tête baissée, les jambes lourdes, et
-        ton prénom crié au milieu de mille autres ne lui parvient pas.</p>
-      <p>Une grosse tête change tout, parce que c'est la seule chose qu'un
-        coureur repère à coup sûr dans une foule : son propre visage, en grand.
-        Il lève les yeux, il rit, il te trouve. Pour quelques secondes, les
-        jambes oublient les kilomètres.</p>
+      <p>{{ t("probleme.p1") }}</p>
+      <p>{{ t("probleme.p2") }}</p>
     </div>
   </div>
 </section>
@@ -78,39 +66,18 @@
 <section class="bande" id="grosse-tete">
   <div class="page">
     <div class="intro">
-      <h2>Ce que tu reçois</h2>
-      <p>Un panneau rigide à son effigie, découpé au plus près de son visage,
-        qui se tient d'une main et se range ensuite sur une étagère.</p>
+      <h2>{{ t("recois.titre") }}</h2>
+      <p>{{ t("recois.intro") }}</p>
     </div>
 
     <div class="planches">
+      {% for n in range(1, 5) %}
       <figure>
-        {{ photo_a_venir("Photo à venir", "Gros plan sur la découpe qui suit les cheveux et le menton.", "carre") }}
-        <figcaption><b>Découpée à la forme</b>
-          Nous suivons le contour de son visage et de ses cheveux, avec une
-          fine marge blanche qui fait ressortir la silhouette.</figcaption>
+        {{ photo_a_venir(t("recois.p%d_photo" % n), "carre") }}
+        <figcaption><b>{{ t("recois.p%d_titre" % n) }}</b>
+          {{ t("recois.p%d" % n) }}</figcaption>
       </figure>
-      <figure>
-        {{ photo_a_venir("Photo à venir", "La grosse tête tenue sous la pluie ou dans le vent, sur un trail.", "carre") }}
-        <figcaption><b>Un PVC rigide de 3 mm</b>
-          Il ne se plie pas dans le vent et ne gondole pas sous la pluie. Il
-          reste léger, si bien qu'il se porte à bout de bras toute une
-          matinée.</figcaption>
-      </figure>
-      <figure>
-        {{ photo_a_venir("Photo à venir", "Une famille qui brandit trois grosses têtes à un ravitaillement.", "carre") }}
-        <figcaption><b>Pour toute la bande</b>
-          Jusqu'à trois exemplaires du même visage,
-          et à trois chaque tête revient jusqu'à {{ economie }} % moins cher.
-          La famille, le club et les collègues peuvent chacun avoir la
-          leur.</figcaption>
-      </figure>
-      <figure>
-        {{ photo_a_venir("Photo à venir", "La grosse tête accrochée au mur à côté de la médaille.", "carre") }}
-        <figcaption><b>Elle reste après la course</b>
-          Elle finit souvent au mur, à côté de la médaille et du dossard. Le
-          souvenir dure bien plus longtemps que la course.</figcaption>
-      </figure>
+      {% endfor %}
     </div>
   </div>
 </section>
@@ -119,31 +86,26 @@
 <section class="bande papier" id="tailles">
   <div class="page">
     <div class="intro">
-      <h2>Cinq tailles, à l'échelle</h2>
-      <p>Chaque taille est tenue ici par une silhouette d'un mètre
-        soixante-quinze, pour que tu voies ce que donnera la tienne au bord du
-        parcours.</p>
-      <p>Chacune se commande en 1, 2 ou 3 exemplaires du même visage. La
-        deuxième et la troisième tête coûtent bien moins cher que la première,
-        si bien qu'à trois chaque tête revient jusqu'à {{ economie }} % moins
-        cher qu'à l'unité.</p>
+      <h2>{{ t("tailles.titre") }}</h2>
+      <p>{{ t("tailles.intro1") }}</p>
+      <p>{{ t("tailles.intro2") }}</p>
     </div>
 
     <div class="tailles">
-      {% for cle, t in tailles.items() %}
+      {% for cle, taille in tailles.items() %}
       <div class="taille{% if cle == conseillee %} conseillee{% endif %}">
-        {% if cle == conseillee %}<span class="badge">Notre conseil</span>{% endif %}
-        {{ echelle(t.hauteur) }}
-        <div class="mesure">{{ t.hauteur }} cm</div>
-        <div class="nom">{{ t.nom }}</div>
-        <p>{{ t.pour }}</p>
-        {{ grille_prix(t) }}
+        {% if cle == conseillee %}<span class="badge">{{ t("tailles.conseil") }}</span>{% endif %}
+        {{ echelle(taille.hauteur) }}
+        <div class="mesure">{{ taille.hauteur }} cm</div>
+        <div class="nom">{{ t("taille.%s.nom" % cle) }}</div>
+        <p>{{ t("taille.%s.pour" % cle) }}</p>
+        {{ grille_prix(taille) }}
       </div>
       {% endfor %}
     </div>
 
     <p style="margin-top:34px;">
-      <a class="action" href="/creer">Créer une grosse tête</a>
+      <a class="action" href="{{ url('creer') }}">{{ t("nav.cta") }}</a>
     </p>
   </div>
 </section>
@@ -152,33 +114,17 @@
 <section class="bande" id="comment">
   <div class="page">
     <div class="intro">
-      <h2>Comment ça marche</h2>
-      <p>Tu vois ta grosse tête telle qu'elle sera imprimée avant de payer quoi
-        que ce soit.</p>
+      <h2>{{ t("comment.titre") }}</h2>
+      <p>{{ t("comment.intro") }}</p>
     </div>
 
     <div class="etapes">
+      {% for n in range(1, 5) %}
       <div>
-        <h3>Tu envoies une photo de son visage</h3>
-        <p>Une photo nette prise au téléphone suffit. Inutile de la détourer,
-          nous nous en chargeons.</p>
+        <h3>{{ t("comment.e%d_t" % n) }}</h3>
+        <p>{{ t("comment.e%d" % n) }}</p>
       </div>
-      <div>
-        <h3>Nous détourons et te montrons l'aperçu</h3>
-        <p>Son visage apparaît découpé, à la taille choisie, tenu par une
-          silhouette qui donne l'échelle. Tu peux recadrer jusqu'à ce qu'il te
-          plaise.</p>
-      </div>
-      <div>
-        <h3>Tu choisis la taille et le nombre d'exemplaires</h3>
-        <p>Le paiement se fait en trente secondes sur une page sécurisée de
-          Stripe, et la facture arrive aussitôt par courriel.</p>
-      </div>
-      <div>
-        <h3>Nous imprimons et expédions</h3>
-        <p>Ta grosse tête est fabriquée en France et expédiée {{ delai }}.
-          Pense à commander une dizaine de jours avant la course.</p>
-      </div>
+      {% endfor %}
     </div>
   </div>
 </section>
@@ -186,12 +132,12 @@
 <!-- ======================================================= l'objet -->
 <section class="bande serre papier">
   <div class="page">
-    <div class="intro"><h2>L'objet</h2></div>
+    <div class="intro"><h2>{{ t("objet.titre") }}</h2></div>
     <div class="fiche">
-      <div><b>De {{ hauteurs|min }} à {{ hauteurs|max }} cm</b><span>{{ hauteurs[:-1]|join(", ") }} ou {{ hauteurs[-1] }} cm de haut, la largeur suit son visage</span></div>
-      <div><b>PVC expansé 3 mm</b><span>Rigide, léger, résistant à l'eau</span></div>
-      <div><b>Découpe à la forme</b><span>Impression couleur haute définition, au contour du visage</span></div>
-      <div><b>1, 2 ou 3 exemplaires</b><span>Du même visage, dans le même colis</span></div>
+      <div><b>{{ t("objet.h_b", min=hauteurs|min, max=hauteurs|max) }}</b><span>{{ t("objet.h", liste=hauteurs[:-1]|join(", ") ~ " " ~ t("commun.ou") ~ " " ~ hauteurs[-1]) }}</span></div>
+      <div><b>{{ t("objet.pvc_b") }}</b><span>{{ t("objet.pvc") }}</span></div>
+      <div><b>{{ t("objet.dec_b") }}</b><span>{{ t("objet.dec") }}</span></div>
+      <div><b>{{ t("objet.ex_b") }}</b><span>{{ t("objet.ex") }}</span></div>
     </div>
   </div>
 </section>
@@ -202,18 +148,20 @@
     <div class="prix">
       <div class="dedans">
         <div>
-          <h2>Une photo, un prix clair.</h2>
-          <p style="margin-top:14px;">Détourage, impression, découpe et
-            expédition sont compris. La deuxième et la troisième tête coûtent
-            bien moins cher que la première. Tu ne paies qu'après avoir vu
-            l'aperçu, et rien ne t'y oblige.</p>
-          <a class="action" href="/creer">Créer une grosse tête</a>
+          <h2>{{ t("prix.titre") }}</h2>
+          <p style="margin-top:14px;">{{ t("prix.texte") }}</p>
+          <a class="action" href="{{ url('creer') }}">{{ t("nav.cta") }}</a>
         </div>
         <div style="text-align:right;">
-          <p style="margin-bottom:6px;">À partir de</p>
+          <p style="margin-bottom:6px;">{{ t("prix.a_partir") }}</p>
           {% set centimes = ((plancher - plancher|int) * 100)|round|int %}
-          <div class="montant">{{ plancher|int }}<small>{% if centimes %},{{ "%02d"|format(centimes) }}{% endif %} €</small></div>
-          <p style="margin-top:10px;">Expédiée {{ delai }}</p>
+          {% set decimales = (("," if lang != "en" else ".") ~ "%02d"|format(centimes)) if centimes else "" %}
+          {% if lang == "en" %}
+          <div class="montant"><small>€</small>{{ plancher|int }}<small>{{ decimales }}</small></div>
+          {% else %}
+          <div class="montant">{{ plancher|int }}<small>{{ decimales }} €</small></div>
+          {% endif %}
+          <p style="margin-top:10px;">{{ expediee }}</p>
         </div>
       </div>
     </div>
@@ -225,17 +173,12 @@
   <div class="page">
     <div class="bande-verte">
       <div>
-        <span class="etiquette">Famille, club, collègues</span>
-        <h2>Toute la bande sera au bord du parcours&nbsp;?</h2>
-        <p style="margin-top:16px;">Commande jusqu'à trois exemplaires du même
-          visage en une seule fois. La deuxième et la troisième tête coûtent
-          bien moins cher que la première : à trois, chaque tête revient
-          jusqu'à {{ economie }} % moins cher qu'à l'unité. Tout arrive dans le
-          même colis, et chacun pourra se poster à un endroit différent du
-          parcours.</p>
+        <span class="etiquette">{{ t("bande.etiquette") }}</span>
+        <h2>{{ t("bande.titre") }}</h2>
+        <p style="margin-top:16px;">{{ t("bande.texte") }}</p>
       </div>
       <div>
-        <a class="action" href="/creer">Commander pour la bande</a>
+        <a class="action" href="{{ url('creer') }}">{{ t("bande.cta") }}</a>
       </div>
     </div>
   </div>
@@ -244,19 +187,12 @@
 <!-- ===================================================== fondateur -->
 <section class="bande papier">
   <div class="page fondateur">
-    <img src="/img/laurent.jpg" width="420" height="420"
-         alt="Portrait de Laurent Thillaye du Boullay">
+    <img src="/img/laurent.jpg" width="420" height="420" alt="{{ t('fondateur.alt') }}">
     <div>
-      <p class="citation">« Chez Westiti, nos photographes voient passer des
-        milliers de coureurs à chaque course. Sur les photos, les plus grands
-        sourires apparaissent presque toujours au même endroit : là où un
-        proche brandit une grosse tête.</p>
-      <p class="citation">J'ai voulu que chacun puisse offrir ce moment, sans
-        logiciel ni imprimeur à chercher. Une photo suffit, et nous nous
-        occupons du reste. »</p>
+      <p class="citation">{{ t("fondateur.c1") }}</p>
+      <p class="citation">{{ t("fondateur.c2") }}</p>
       <p class="qui">Laurent Thillaye du Boullay</p>
-      <p class="role">CEO Westiti — plus de 380 photographes partenaires,
-        partout en France</p>
+      <p class="role">{{ t("fondateur.role") }}</p>
     </div>
   </div>
 </section>
@@ -264,57 +200,14 @@
 <!-- ====================================================== questions -->
 <section class="bande" id="questions">
   <div class="page">
-    <div class="intro"><h2>Questions</h2></div>
+    <div class="intro"><h2>{{ t("faq.titre") }}</h2></div>
     <div class="faq">
+      {% for n in range(1, 9) %}
       <details>
-        <summary>Quelle photo dois-je envoyer&nbsp;?</summary>
-        <p>Une photo nette, de face ou de trois quarts, où le visage est bien
-          éclairé et occupe une bonne partie de l'image. Une photo prise au
-          téléphone convient très bien. Évite les captures d'écran et les
-          photos floues, et inutile de la détourer toi-même.</p>
+        <summary>{{ t("faq.q%d" % n) }}</summary>
+        <p>{{ t("faq.r%d" % n) }}{% if n == 8 and livraison_offerte %} {{ t("faq.r8_offerte") }}{% endif %}</p>
       </details>
-      <details>
-        <summary>Combien de temps avant la course dois-je commander&nbsp;?</summary>
-        <p>Ta grosse tête est expédiée {{ delai }}, puis la livraison prend
-          en général deux à trois jours. Nous te conseillons de commander une
-          dizaine de jours avant la course pour être tranquille.</p>
-      </details>
-      <details>
-        <summary>Puis-je voir le résultat avant de payer&nbsp;?</summary>
-        <p>Oui. L'aperçu te montre son visage détouré, à la taille choisie,
-          tel qu'il sera imprimé. Tu peux recadrer, changer de photo ou de
-          taille autant de fois que tu veux avant de commander.</p>
-      </details>
-      <details>
-        <summary>Faut-il l'accord de la personne représentée&nbsp;?</summary>
-        <p>Oui. Son visage lui appartient, et tu nous confirmes au moment de la
-          commande que tu as son accord. Pour une surprise, l'accord d'un
-          proche qui la connaît bien suffit en général, mais c'est à toi d'en
-          juger.</p>
-      </details>
-      <details>
-        <summary>Que faites-vous de la photo&nbsp;?</summary>
-        <p>Elle sert uniquement à fabriquer ta grosse tête. Nous l'effaçons
-          une fois la commande expédiée, et elle n'est jamais réutilisée ni
-          montrée ailleurs.</p>
-      </details>
-      <details>
-        <summary>Est-ce que ça résiste à la pluie&nbsp;?</summary>
-        <p>Oui. Le PVC ne craint pas l'eau et l'impression ne coule pas. Le
-          panneau reste rigide même par grand vent, ce qui n'est pas le cas
-          d'une pancarte en carton.</p>
-      </details>
-      <details>
-        <summary>Puis-je commander plusieurs têtes différentes&nbsp;?</summary>
-        <p>Oui. Crée la première, puis recommence avec une autre photo. Pour le
-          même visage, tu peux commander jusqu'à trois exemplaires, et chaque
-          tête revient alors jusqu'à {{ economie }} % moins cher.</p>
-      </details>
-      <details>
-        <summary>Vous livrez où&nbsp;?</summary>
-        <p>Partout en France métropolitaine, à l'adresse de ton choix.
-          {% if livraison_offerte %}La livraison est offerte.{% endif %}</p>
-      </details>
+      {% endfor %}
     </div>
   </div>
 </section>
@@ -322,10 +215,9 @@
 <!-- ================================================== dernier appel -->
 <section class="bande serre papier">
   <div class="page" style="text-align:center;">
-    <h2 style="margin-inline:auto; max-width:18ch;">Sa prochaine course mérite un supporter qu'on ne rate pas.</h2>
-    <p class="doux" style="margin:16px auto 26px; max-width:46ch;">
-      Une photo pour commencer. Rien à payer pour voir l'aperçu.</p>
-    <a class="action" href="/creer">Créer une grosse tête</a>
+    <h2 style="margin-inline:auto; max-width:18ch;">{{ t("final.titre") }}</h2>
+    <p class="doux" style="margin:16px auto 26px; max-width:46ch;">{{ t("final.texte") }}</p>
+    <a class="action" href="{{ url('creer') }}">{{ t("nav.cta") }}</a>
   </div>
 </section>
 
