@@ -67,8 +67,30 @@ FULFILLER_CLE = os.environ.get("FULFILLER_API_KEY", "")
 FULFILLER_BAC_A_SABLE = os.environ.get("FULFILLER_SANDBOX", "1") == "1"
 ADRESSE_PUBLIQUE = os.environ.get("WG_ADRESSE", "https://grossetete.westiti.app")
 
+# Numéro de TVA intracommunautaire enregistré dans Stripe (identifiant
+# « txi_… »), facultatif : s'il est renseigné, il figure sur les factures.
+STRIPE_TVA = os.environ.get("STRIPE_TVA", "")
+DEVISE = "eur"
+
+# Les pays où Stripe accepte une adresse de livraison. La FAQ annonce la
+# France métropolitaine : la liste doit rester d'accord avec elle.
+PAYS_LIVRAISON = ["FR"]
+
 # Poids maximal d'une photo envoyée, en mégaoctets.
 PHOTO_MAX_MO = 15
+
+# --------------------------------------------------------------------------
+# Les données (le registre des commandes et les photos)
+# --------------------------------------------------------------------------
+
+# Sur Railway, ce dossier est un volume monté sur /data : il survit aux
+# redéploiements. En développement, il vit à côté du code.
+DONNEES = os.environ.get("WG_DONNEES", os.path.join(RACINE, "donnees"))
+DOSSIER_PHOTOS = os.path.join(DONNEES, "photos")
+
+# Une photo dont la commande n'a pas été payée est effacée au bout de ce
+# délai : nous ne gardons pas le visage de quelqu'un qui n'a rien acheté.
+ABANDON_HEURES = 24
 
 
 def paiement_ouvert() -> bool:

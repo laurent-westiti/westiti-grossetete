@@ -555,6 +555,24 @@ T = {
     "err.poids": {"fr": "La photo dépasse {mo} Mo.", "en": "The photo is larger than {mo} MB.", "es": "La foto supera los {mo} MB."},
     "err.quantite": {"fr": "Choisis 1, 2 ou 3 exemplaires.", "en": "Please choose 1, 2 or 3 copies.", "es": "Elige 1, 2 o 3 ejemplares."},
     "err.paiement": {"fr": "Le paiement arrive bientôt.", "en": "Payment is coming soon.", "es": "El pago llegará pronto."},
+    "err.paiement_echec": {
+        "fr": "La page de paiement n'a pas pu s'ouvrir. Réessaie dans un instant en choisissant de nouveau ta photo.",
+        "en": "The payment page couldn't open. Please try again in a moment; just choose your photo again.",
+        "es": "La página de pago no ha podido abrirse. Vuelve a intentarlo en un momento; solo tienes que elegir tu foto de nuevo.",
+    },
+
+    # Ce que Stripe affiche sur sa page de paiement et sur la facture.
+    "stripe.produit": {"fr": "Grosse tête {h} cm", "en": "Big Head {h} cm", "es": "Cabeza gigante {h} cm"},
+    "stripe.description": {
+        "fr": "{n} exemplaire(s) du même visage, PVC rigide 3 mm découpé à la forme, imprimé et expédié",
+        "en": "{n} copy/copies of the same face, rigid 3 mm PVC cut to shape, printed and shipped",
+        "es": "{n} ejemplar(es) de la misma cara, PVC rígido de 3 mm recortado a medida, impreso y enviado",
+    },
+    "stripe.pied_facture": {
+        "fr": "Merci pour ta commande. Pour toute question sur cette facture, réponds simplement au courriel de confirmation.",
+        "en": "Thank you for your order. For any question about this invoice, simply reply to the confirmation email.",
+        "es": "Gracias por tu pedido. Para cualquier pregunta sobre esta factura, responde al correo de confirmación.",
+    },
 
     # ================================================= bientôt, merci
     "bientot.titre_page": {"fr": "Presque prêt", "en": "Almost ready", "es": "Casi listo"},

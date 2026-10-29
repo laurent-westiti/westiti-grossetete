@@ -22,12 +22,16 @@ Démarrage en développement :
 import json
 import os
 
-from fastapi import FastAPI, File, Form, Request, UploadFile
-from fastapi.responses import HTMLResponse
+import traceback
+
+from fastapi import FastAPI, File, Form, HTTPException, Request, UploadFile
+from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from markupsafe import Markup
 
+import commandes
+import paiement
 import reglages
 import traductions as tr
 
@@ -41,6 +45,24 @@ application.mount("/img", StaticFiles(directory=os.path.join(reglages.RACINE, "s
 FORMATS_ACCEPTES = {"image/jpeg", "image/png", "image/heic", "image/heif", "image/webp"}
 
 tr.verifier()
+
+
+@application.on_event("startup")
+def demarrer():
+    commandes.initialiser()
+    efface = commandes.balayer_abandons()
+    if efface:
+        print(f"{efface} photo(s) de commandes impayées effacée(s) au démarrage")
+
+
+def _base_url(request: Request) -> str:
+    """L'adresse du site telle que le visiteur la voit (provisoire ou définitive).
+
+    Les adresses de retour de Stripe la reprennent : le paiement fonctionne
+    ainsi aussi bien sur l'adresse provisoire de Railway que sur
+    grossetete.westiti.app, sans rien changer.
+    """
+    return str(request.base_url).rstrip("/")
 
 
 # --------------------------------------------------------------------------
@@ -124,6 +146,10 @@ def sante():
     return {
         "ok": True,
         "paiement": reglages.paiement_ouvert(),
+        "webhook": bool(reglages.STRIPE_SECRET_WEBHOOK),
+        "mode_stripe": ("test" if reglages.STRIPE_CLE_SECRETE.startswith("sk_test")
+                        else "réel" if reglages.STRIPE_CLE_SECRETE else "absent"),
+        "donnees": reglages.DONNEES,
         "fabrication": reglages.fabrication_branchee(),
     }
 
@@ -169,10 +195,38 @@ async def commander(
             total=tr.prix(total, langue),
         ))
 
-    # À brancher : enregistrement de la commande, détourage, session Stripe
-    # Checkout (adresse de livraison collectée par Stripe, langue `langue`),
-    # puis redirection.
-    return refuser("err.paiement")
+    # La commande et sa photo sont enregistrées, puis le client part payer
+    # sur la page de Stripe. Si le paiement n'aboutit pas, la photo sera
+    # effacée.
+    identifiant = commandes.creer(
+        langue, taille, quantite, round(total * 100),
+        {"zoom": zoom, "x": decalage_x, "y": decalage_y},
+        contenu, photo.content_type,
+    )
+    try:
+        adresse = paiement.ouvrir_paiement(commandes.lire(identifiant), _base_url(request))
+    except paiement.ErreurPaiement:
+        traceback.print_exc()
+        commandes.abandonner(identifiant)
+        return refuser("err.paiement_echec")
+    return RedirectResponse(adresse, status_code=303)
+
+
+@application.post("/stripe/webhook")
+async def webhook_stripe(request: Request):
+    """Reçoit la confirmation de paiement de Stripe.
+
+    C'est le seul endroit qui marque une commande comme payée. Le retour du
+    navigateur ne déclenche rien : un onglet fermé ne doit pas priver un
+    client de sa commande, et une adresse forgée ne doit rien provoquer.
+    """
+    charge = await request.body()
+    signature = request.headers.get("stripe-signature", "")
+    try:
+        evenement = paiement.lire_evenement(charge, signature)
+    except paiement.ErreurPaiement as erreur:
+        raise HTTPException(400, str(erreur))
+    return {"recu": True, "commande": paiement.traiter(evenement)}
 
 
 # --------------------------------------------------------------------------

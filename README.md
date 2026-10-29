@@ -48,13 +48,31 @@ Fulfiller.
 | Brique | État |
 |---|---|
 | Page d'accueil, atelier de création, aperçu en direct | Fait |
-| Paiement Stripe | À brancher (clés à poser dans Railway) |
+| Paiement Stripe | Fait, sur un compte Stripe dédié (clés à poser dans Railway) |
 | Détourage automatique du visage | À brancher |
 | Envoi à Fulfiller et suivi par webhook | À brancher (accès API demandé) |
 | Textes légaux | Trame à faire valider |
 
+## Paiement
+
+Le client paie sur une page de Stripe, dans sa langue. Stripe collecte le
+courriel, le téléphone et l'adresse de livraison (France uniquement), et
+envoie la facture. Une commande ne devient « payée » qu'à la réception du
+webhook signé par Stripe (`/stripe/webhook`, événements
+`checkout.session.completed` et `checkout.session.expired`).
+
+La commande et la photo sont enregistrées dans `/data` (volume Railway). Une
+photo dont la commande n'est pas payée est effacée à l'expiration de la page
+de paiement, et au plus tard au bout de 24 heures.
+
 Sans clé Stripe, une commande aboutit à une page « paiement bientôt ouvert »
-et la photo n'est pas conservée.
+et rien n'est conservé.
+
+Tests du parcours de paiement, sans réseau :
+
+```bash
+cd service && python3 test_paiement.py
+```
 
 ## Démarrage en développement
 
