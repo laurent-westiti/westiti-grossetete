@@ -70,8 +70,8 @@
     <div class="planches">
       {% for n, image in [(1, "decoupe"), (2, "pluie"), (3, "famille"), (4, "supportrice")] %}
       <figure>
-        <div class="photo format-paysage">
-          <img src="/img/vignette-{{ image }}.jpg" width="756" height="500" loading="lazy"
+        <div class="photo format-carre">
+          <img src="/img/vignette-{{ image }}.jpg" width="800" height="800" loading="lazy"
                alt="{{ t('recois.p%d_photo' % n) }}">
         </div>
         <figcaption><b>{{ t("recois.p%d_titre" % n) }}</b>
