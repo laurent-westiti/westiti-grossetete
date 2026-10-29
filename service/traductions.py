@@ -163,9 +163,9 @@ T = {
         "es": "Un panel rígido con su cara, recortado al ras de su rostro, que se sujeta con una mano y luego se guarda en una estantería.",
     },
     "recois.p1_photo": {
-        "fr": "Gros plan sur la découpe qui suit les cheveux et le menton.",
-        "en": "Close-up of the cut following the hair and chin.",
-        "es": "Primer plano del recorte que sigue el pelo y la barbilla.",
+        "fr": 'Une grosse tête fixée à une barrière, au bord du parcours, pendant que les coureurs passent',
+        "en": 'A Big Head fixed to a barrier along the course as the runners go by',
+        "es": 'Una cabeza gigante sujeta a una valla junto al recorrido, mientras pasan los corredores',
     },
     "recois.p1_titre": {"fr": "Découpée à la forme", "en": "Cut to shape", "es": "Recortada a medida"},
     "recois.p1": {
@@ -174,9 +174,9 @@ T = {
         "es": "Seguimos el contorno de su cara y de su pelo, con un fino margen blanco que hace resaltar la silueta.",
     },
     "recois.p2_photo": {
-        "fr": "La grosse tête tenue sous la pluie ou dans le vent, sur un trail.",
-        "en": "The Big Head held up in the rain or wind, on a trail race.",
-        "es": "La cabeza gigante bajo la lluvia o el viento, en un trail.",
+        "fr": "Une supportrice brandit une grosse tête sous la pluie, au passage d'un coureur",
+        "en": 'A supporter holds up a Big Head in the rain as a runner goes by',
+        "es": 'Una aficionada levanta una cabeza gigante bajo la lluvia al paso de un corredor',
     },
     "recois.p2_titre": {"fr": "Un PVC rigide de 3 mm", "en": "Rigid 3 mm PVC", "es": "PVC rígido de 3 mm"},
     "recois.p2": {
@@ -185,9 +185,9 @@ T = {
         "es": "No se dobla con el viento ni se deforma con la lluvia. Es ligero, así que se puede sostener con el brazo en alto toda la mañana.",
     },
     "recois.p3_photo": {
-        "fr": "Une famille qui brandit trois grosses têtes à un ravitaillement.",
-        "en": "A family holding up three Big Heads at an aid station.",
-        "es": "Una familia levantando tres cabezas gigantes en un avituallamiento.",
+        "fr": "Une famille brandit trois grosses têtes du même visage au bord d'un trail",
+        "en": 'A family holds up three Big Heads of the same face beside a trail race',
+        "es": 'Una familia levanta tres cabezas gigantes de la misma cara junto a un trail',
     },
     "recois.p3_titre": {"fr": "Pour toute la bande", "en": "For the whole crew", "es": "Para toda la pandilla"},
     "recois.p3": {
@@ -196,9 +196,9 @@ T = {
         "es": "Hasta tres ejemplares de la misma cara, y con tres cada cabeza sale hasta un {economie} % más barata. La familia, el club y los compañeros pueden tener cada uno la suya.",
     },
     "recois.p4_photo": {
-        "fr": "La grosse tête accrochée au mur à côté de la médaille.",
-        "en": "The Big Head hanging on the wall next to the medal.",
-        "es": "La cabeza gigante colgada en la pared junto a la medalla.",
+        "fr": "Une supportrice brandit une grosse tête à côté d'une pancarte « T'es le meilleur »",
+        "en": "A supporter holds up a Big Head next to a sign saying “You're the best”",
+        "es": 'Una aficionada levanta una cabeza gigante junto a un cartel que dice «Eres el mejor»',
     },
     "recois.p4_titre": {"fr": "Elle reste après la course", "en": "It stays after the race", "es": "Se queda después de la carrera"},
     "recois.p4": {
