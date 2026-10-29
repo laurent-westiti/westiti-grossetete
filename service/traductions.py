@@ -118,9 +118,9 @@ T = {
     "heros.voir_tailles": {"fr": "Voir les tailles", "en": "See the sizes", "es": "Ver los tamaños"},
     "heros.des": {"fr": "Dès {prix}", "en": "From {prix}", "es": "Desde {prix}"},
     "heros.alt": {
-        "fr": "Dans une tribune pleine de drapeaux français, des supporters brandissent quatre grosses têtes à l'effigie de leurs athlètes",
-        "en": "In a stand full of French flags, fans hold up four giant cut-out heads of their athletes",
-        "es": "En una grada llena de banderas francesas, unos aficionados levantan cuatro cabezas gigantes con la cara de sus atletas",
+        "fr": "Au bord d'un semi-marathon, des supporters brandissent deux grosses têtes souriantes au passage des coureurs",
+        "en": "Along a half marathon, fans hold up two smiling Big Heads as the runners go by",
+        "es": "Junto al recorrido de una media maratón, unos aficionados levantan dos cabezas gigantes sonrientes al paso de los corredores",
     },
 
     # ---------------------------------------------------------- confiance

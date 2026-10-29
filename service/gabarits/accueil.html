@@ -15,9 +15,7 @@
       <p class="promesse">{{ t("heros.promesse") }}</p>
       <h1>{{ t("heros.titre") }}</h1>
       <p class="emotion" style="margin-top:26px;">{{ t("heros.emotion") }}</p>
-    </div>
-    <div>
-      <p style="font-size:18.5px;">{{ t("heros.texte") }}</p>
+      <p style="margin-top:22px; font-size:18.5px;">{{ t("heros.texte") }}</p>
       <p style="margin-top:28px;">
         <a class="action" href="{{ url('creer') }}">{{ t("nav.cta") }}</a>
         <a class="secondaire" href="#tailles">{{ t("heros.voir_tailles") }}</a>
@@ -29,11 +27,10 @@
       </div>
     </div>
 
-    <figure class="banniere">
-      <img src="/img/heros.jpg" srcset="/img/heros-1000.jpg 1000w, /img/heros.jpg 2000w"
-           sizes="(max-width: 1240px) 100vw, 1200px" width="2000" height="815"
+    <figure class="photo format-portrait">
+      <img src="/img/heros.jpg" srcset="/img/heros-640.jpg 640w, /img/heros.jpg 1122w"
+           sizes="(max-width: 520px) 100vw, 480px" width="1122" height="1402"
            alt="{{ t('heros.alt') }}">
-      <figcaption>(COUVERCELLE ANTOINE / KMSP / AFP)</figcaption>
     </figure>
   </div>
 </section>

@@ -145,21 +145,7 @@ a { color: var(--vert); text-underline-offset: 3px; }
   display: grid; gap: clamp(34px, 5vw, 64px); align-items: center;
   grid-template-columns: minmax(0, 1fr);
 }
-@media (min-width: 940px) { .heros .page { grid-template-columns: 1.1fr .9fr; align-items: end; } }
-
-/* La photo principale, en bandeau sous le texte : un cadrage serré sur les
-   grosses têtes donne une image très large, qui serait perdue dans une
-   colonne. Sur téléphone, le bandeau se resserre sur les deux têtes du
-   centre. Le crédit de l'agence est obligatoire et reste toujours lisible. */
-.banniere { grid-column: 1 / -1; margin: clamp(8px, 2vw, 20px) 0 0; }
-.banniere img {
-  width: 100%; max-width: 100%; aspect-ratio: 2000 / 815; object-fit: cover; object-position: 50% 40%;
-  border-radius: 20px; box-shadow: 0 4px 10px rgba(18,27,25,.08), 0 30px 60px rgba(18,27,25,.14);
-}
-.banniere figcaption { margin-top: 10px; font-size: 13px; color: var(--gris); text-align: right; letter-spacing: .01em; }
-@media (max-width: 640px) {
-  .banniere img { aspect-ratio: 4 / 3; border-radius: 16px; }
-}
+@media (min-width: 940px) { .heros .page { grid-template-columns: 1.15fr .85fr; } }
 .heros .emotion { max-width: none; font-size: clamp(23px, 2.6vw, 33px); }
 .promesse { color: var(--corail); margin: 0 0 16px; }
 
@@ -537,11 +523,3 @@ input:focus, textarea:focus, select:focus {
 }
 @media (max-width: 979px) { .apercu-col .recap dl { display: none; } }
 
-/* Sur téléphone et tablette, la photo vient juste après le titre, pour
-   qu'elle apparaisse dès l'arrivée sur la page. */
-@media (max-width: 939px) {
-  .heros .page { row-gap: 22px; }
-  .heros .page > div:first-child { order: 1; }
-  .heros .banniere { order: 2; margin-top: 0; }
-  .heros .page > div:nth-child(2) { order: 3; }
-}
