@@ -163,9 +163,9 @@ T = {
         "es": "Un panel rígido con su cara, recortado al ras de su rostro, que se sujeta con una mano y luego se guarda en una estantería.",
     },
     "recois.p1_photo": {
-        "fr": 'Une grosse tête fixée à une barrière, au bord du parcours, pendant que les coureurs passent',
-        "en": 'A Big Head fixed to a barrier along the course as the runners go by',
-        "es": 'Una cabeza gigante sujeta a una valla junto al recorrido, mientras pasan los corredores',
+        "fr": "Une supportrice brandit une grosse tête à côté d'une pancarte « T'es le meilleur »",
+        "en": "A supporter holds up a Big Head next to a sign saying “You're the best”",
+        "es": 'Una aficionada levanta una cabeza gigante junto a un cartel que dice «Eres el mejor»',
     },
     "recois.p1_titre": {"fr": "Découpée à la forme", "en": "Cut to shape", "es": "Recortada a medida"},
     "recois.p1": {
@@ -196,9 +196,9 @@ T = {
         "es": "Hasta tres ejemplares de la misma cara, y con tres cada cabeza sale hasta un {economie} % más barata. La familia, el club y los compañeros pueden tener cada uno la suya.",
     },
     "recois.p4_photo": {
-        "fr": "Une supportrice brandit une grosse tête à côté d'une pancarte « T'es le meilleur »",
-        "en": "A supporter holds up a Big Head next to a sign saying “You're the best”",
-        "es": 'Una aficionada levanta una cabeza gigante junto a un cartel que dice «Eres el mejor»',
+        "fr": 'Une grosse tête fixée à une barrière, au bord du parcours, pendant que les coureurs passent',
+        "en": 'A Big Head fixed to a barrier along the course as the runners go by',
+        "es": 'Una cabeza gigante sujeta a una valla junto al recorrido, mientras pasan los corredores',
     },
     "recois.p4_titre": {"fr": "Elle reste après la course", "en": "It stays after the race", "es": "Se queda después de la carrera"},
     "recois.p4": {
