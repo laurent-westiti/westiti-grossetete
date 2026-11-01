@@ -5,9 +5,10 @@ Le parcours tient en quatre temps : le proche envoie une photo et choisit sa
 taille, il voit l'aperçu, il paie sur Stripe, puis la grosse tête est
 fabriquée et expédiée par Fulfiller.
 
-Le site existe en trois langues. Le français vit à la racine (/, /creer…),
-l'anglais sous /en (/en, /en/create…) et l'espagnol sous /es (/es,
-/es/crear…). Les textes sont tous dans `traductions.py`.
+Le site existe en quatre langues. Le français vit à la racine (/, /creer…),
+l'anglais sous /en (/en, /en/create…), l'espagnol sous /es (/es,
+/es/crear…) et l'italien sous /it (/it, /it/crea…). Les textes sont tous
+dans `traductions.py`.
 
 État actuel : les pages et le formulaire sont en place. Le paiement Stripe,
 le détourage automatique et l'envoi à Fulfiller se brancheront ici dès que
@@ -230,7 +231,7 @@ async def webhook_stripe(request: Request):
 
 
 # --------------------------------------------------------------------------
-# Pages, dans les trois langues
+# Pages, dans les quatre langues
 # --------------------------------------------------------------------------
 
 @application.get("/", response_class=HTMLResponse)

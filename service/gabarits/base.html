@@ -1,6 +1,6 @@
 {#
   Ossature commune de toutes les pages de Westiti Grosse Tête, dans les
-  trois langues.
+  quatre langues.
 #}
 {% from "macros.html" import langues_menu with context %}
 <!doctype html>
@@ -11,7 +11,7 @@
 <title>{% block titre %}{{ t("meta.titre") }}{% endblock %}</title>
 <meta name="description" content="{{ t('meta.description') }}">
 <meta name="color-scheme" content="light">
-{# Les moteurs de recherche apprennent ainsi que la page existe en trois langues. #}
+{# Les moteurs de recherche apprennent ainsi que la page existe en quatre langues. #}
 {% for l in langues %}<link rel="alternate" hreflang="{{ l }}" href="{{ adresse }}{{ urls_langues[l] }}">
 {% endfor %}<link rel="alternate" hreflang="x-default" href="{{ adresse }}{{ urls_langues['fr'] }}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,7 +20,7 @@
 <link rel="stylesheet" href="/statique/westiti.css?v=5">
 <link rel="icon" type="image/png" href="/img/favicon.png">
 <meta property="og:image" content="/img/logo.png">
-<meta property="og:locale" content="{{ {'fr': 'fr_FR', 'en': 'en_GB', 'es': 'es_ES'}[lang] }}">
+<meta property="og:locale" content="{{ {'fr': 'fr_FR', 'en': 'en_GB', 'es': 'es_ES', 'it': 'it_IT'}[lang] }}">
 {% block tete %}{% endblock %}
 </head>
 <body>

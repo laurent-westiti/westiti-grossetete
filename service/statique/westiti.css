@@ -121,7 +121,7 @@ a { color: var(--vert); text-underline-offset: 3px; }
   .entete .action .court { display: inline; }
 }
 
-/* Les trois drapeaux : de petits ronds, celui de la langue affichée cerclé
+/* Les quatre drapeaux : de petits ronds, celui de la langue affichée cerclé
    de vert, les autres légèrement atténués jusqu'au survol. */
 .langues { display: flex; align-items: center; gap: 7px; }
 .langues a {

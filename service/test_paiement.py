@@ -115,7 +115,7 @@ verifier("le retour après paiement mène à /merci", f"/merci?commande={ident}"
 verifier("l'abandon ramène à l'atelier avec la taille", p["cancel_url"].endswith("/creer?taille=80"))
 verifier("le cadrage est enregistré", json.loads(commandes.lire(ident)["cadrage"])["zoom"] == 1.4)
 
-# 2. Anglais et espagnol.
+# 2. Anglais, espagnol et italien.
 commander("en", "30", 1)
 p = DEMANDES[-1]
 verifier("anglais : page Stripe en anglais", p["locale"] == "en")
@@ -127,6 +127,11 @@ p = DEMANDES[-1]
 verifier("espagnol : page Stripe en espagnol", p["locale"] == "es")
 verifier("espagnol : 159 € pour 100 cm × 2", p["line_items"][0]["price_data"]["unit_amount"] == 15900)
 verifier("espagnol : retour vers /es/crear en cas d'abandon", p["cancel_url"].endswith("/es/crear?taille=100"))
+commander("it", "60", 3)
+p = DEMANDES[-1]
+verifier("italien : page Stripe en italien", p["locale"] == "it")
+verifier("italien : produit « Testa gigante 60 cm × 3 »", p["line_items"][0]["price_data"]["product_data"]["name"] == "Testa gigante 60 cm × 3")
+verifier("italien : retour vers /it/grazie", "/it/grazie?commande=" in p["success_url"])
 
 # 3. Webhook signé : la commande passe payée, l'adresse est enregistrée.
 r = webhook("checkout.session.completed", ident)

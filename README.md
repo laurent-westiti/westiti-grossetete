@@ -14,11 +14,12 @@ Memories.
 
 ## Langues
 
-Le site existe en français (`/`), en anglais (`/en`) et en espagnol (`/es`).
-Trois drapeaux dans l'en-tête permettent de passer d'une langue à l'autre
-sur n'importe quelle page. Les adresses des pages sont traduites
-(`/creer`, `/en/create`, `/es/crear`…), et tous les textes vivent dans
-`service/traductions.py`, une phrase par clé dans les trois langues. Le
+Le site existe en français (`/`), en anglais (`/en`), en espagnol (`/es`) et
+en italien (`/it`). Quatre drapeaux dans l'en-tête permettent de passer d'une
+langue à l'autre sur n'importe quelle page. Les adresses des pages sont
+traduites (`/creer`, `/en/create`, `/es/crear`, `/it/crea`…), et tous les
+textes vivent dans `service/traductions.py`, une phrase par clé dans les
+quatre langues. Le
 service refuse de démarrer si une traduction manque.
 
 ## Où changer quoi
