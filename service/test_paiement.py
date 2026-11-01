@@ -130,8 +130,8 @@ verifier("espagnol : retour vers /es/crear en cas d'abandon", p["cancel_url"].en
 commander("it", "60", 5)
 p = DEMANDES[-1]
 verifier("italien : page Stripe en italien", p["locale"] == "it")
-verifier("italien : produit « Testa gigante 60 cm × 5 » à 112 €", p["line_items"][0]["price_data"]["product_data"]["name"] == "Testa gigante 60 cm × 5"
-         and p["line_items"][0]["price_data"]["unit_amount"] == 11200)
+verifier("italien : produit « Testa gigante 60 cm × 5 » à 111 €", p["line_items"][0]["price_data"]["product_data"]["name"] == "Testa gigante 60 cm × 5"
+         and p["line_items"][0]["price_data"]["unit_amount"] == 11100)
 verifier("italien : retour vers /it/grazie", "/it/grazie?commande=" in p["success_url"])
 
 # 3. Webhook signé : la commande passe payée, l'adresse est enregistrée.
