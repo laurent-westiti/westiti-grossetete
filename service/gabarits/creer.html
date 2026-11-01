@@ -70,14 +70,15 @@
         <header><i>3</i><h2>{{ t("creer.quantite_t") }}</h2></header>
         <p class="aide" style="margin:0;">{{ t("creer.quantite_aide") }}</p>
         {% set t0 = tailles[choix_taille] %}
+        <p class="regle-prix" id="regle-prix">{{ t("creer.regle", premier=prix(t0.prix[1]), plus=plus_panneau(choix_taille)) }}</p>
         <div class="choix-quantites">
           {% for q in quantites %}
           <label>
             <input type="radio" name="quantite" value="{{ q }}" {% if q == choix_quantite %}checked{% endif %}>
-            {% if q == 3 %}<span class="badge">{{ t("creer.meilleur") }}</span>{% endif %}
-            <span class="combien">{{ t("grille.une") if q == 1 else t("grille.plusieurs", n=q) }}</span>
+            {% if q == quantite_max %}<span class="badge">{{ t("creer.meilleur") }}</span>{% endif %}
+            <span class="combien"><b>{{ q }}</b> {{ t("creer.mot_n") if q > 1 else t("creer.mot_1") }}</span>
             <span class="total" data-q="{{ q }}">{{ prix(t0.prix[q]) }}</span>
-            <span class="gain" data-gain="{{ q }}">{% if q == 1 %}{{ t("creer.unite") }}{% else %}{{ t("creer.gain%d" % q, plus=prix(t0.prix[q] - t0.prix[q - 1]), unite=prix(t0.prix[q] / q)) }}{% endif %}</span>
+            <span class="gain" data-gain="{{ q }}">{% if q == 1 %}{{ t("creer.unite") }}{% else %}{{ t("creer.par_panneau", unite=prix(t0.prix[q] / q)) }}{% endif %}</span>
           </label>
           {% endfor %}
         </div>
@@ -140,5 +141,5 @@
     photoMaxMo: {{ photo_max }}
   };
 </script>
-<script src="/statique/creer.js?v=3"></script>
+<script src="/statique/creer.js?v=4"></script>
 {% endblock %}

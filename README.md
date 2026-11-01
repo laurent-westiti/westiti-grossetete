@@ -31,15 +31,15 @@ service refuse de démarrer si une traduction manque.
 | La mise en page de l'accueil | `service/gabarits/accueil.html` |
 | Les couleurs | `service/statique/westiti.css`, en tête de fichier |
 
-Grille tarifaire (TTC, pour 1, 2 ou 3 exemplaires du même visage) :
+Grille tarifaire (TTC, prix du lot de 1 à 5 exemplaires du même visage) :
 
-| Hauteur | 1 tête | 2 têtes | 3 têtes |
-|---|---|---|---|
-| 30 cm | 49 € | 54 € | 59 € |
-| 45 cm | 52 € | 59 € | 64 € |
-| 60 cm | 59 € | 69 € | 79 € |
-| 80 cm | 64 € | 84 € | 99 € |
-| 100 cm | 124 € | 159 € | 199 € |
+| Taille | 1 | 2 | 3 | 4 | 5 | Panneau en plus |
+|---|---|---|---|---|---|---|
+| 30 cm | 49 € | 54 € | 59 € | 64 € | 69 € | +5 € |
+| 45 cm | 54 € | 64 € | 74 € | 84 € | 94 € | +10 € |
+| 60 cm | 59 € | 72 € | 85 € | 98 € | 112 € | +13 € (+14 € pour le 5<sup>e</sup>) |
+| 80 cm | 69 € | 91 € | 113 € | 135 € | 157 € | +22 € |
+| 100 cm | 132 € | 172 € | 212 € | 252 € | 292 € | +40 € |
 
 Le délai d'expédition affiché reste provisoire, en attendant celui de
 Fulfiller.

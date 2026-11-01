@@ -39,14 +39,20 @@
 </svg>
 {%- endmacro %}
 
-{# Les trois prix d'une taille, avec ce que coûte chaque tête en plus. #}
-{% macro grille_prix(t_) -%}
+{# Les prix d'une taille : le premier panneau, ce que coûte chaque panneau
+   en plus, puis le prix par panneau de 1 à 5, qui montre l'économie. #}
+{% macro grille_prix(cle, t_) -%}
 <div class="grille-prix">
   <div class="ligne"><span>{{ t("grille.une") }}</span><b>{{ prix(t_.prix[1]) }}</b></div>
-  <div class="ligne"><span>{{ t("grille.plusieurs", n=2) }}</span><b>{{ prix(t_.prix[2]) }}</b>
-    <small>{{ t("grille.deux", plus=prix(t_.prix[2] - t_.prix[1])) }}</small></div>
-  <div class="ligne"><span>{{ t("grille.plusieurs", n=3) }}</span><b>{{ prix(t_.prix[3]) }}</b>
-    <small>{{ t("grille.trois", plus=prix(t_.prix[3] - t_.prix[2]), unite=prix(t_.prix[3] / 3)) }}</small></div>
+  <p class="plus"><b>{{ plus_panneau(cle) }}</b> {{ t("grille.supplement") }}</p>
+  <table class="paliers">
+    <thead><tr><th scope="col">{{ t("grille.col_n") }}</th><th scope="col">{{ t("grille.col_total") }}</th><th scope="col">{{ t("grille.col_unite") }}</th></tr></thead>
+    <tbody>
+    {% for q in quantites %}
+      <tr{% if q == quantite_max %} class="meilleur"{% endif %}><th scope="row">{{ q }}</th><td>{{ prix(t_.prix[q]) }}</td><td>{{ prix(t_.prix[q] / q) }}</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
 </div>
 {%- endmacro %}
 

@@ -252,18 +252,31 @@ a { color: var(--vert); text-underline-offset: 3px; }
 .taille p { color: var(--gris); font-size: 15px; margin-bottom: 16px; }
 .taille .grille-prix { margin-top: auto; }
 
-/* Les trois prix : la ligne du dessus est le prix d'appel, les deux
-   suivantes disent combien coûte chaque tête en plus, en vert, parce que
-   c'est là que se trouve la bonne affaire. */
+/* Les prix : le premier panneau, ce que coûte chaque panneau en plus (en
+   vert, c'est là qu'est la bonne affaire), puis un petit tableau du prix
+   par panneau de 1 à 5, qui fait voir l'économie d'un coup d'œil. */
 .grille-prix { border-top: 1px solid var(--trait); font-variant-numeric: tabular-nums; }
 .grille-prix .ligne {
   display: grid; grid-template-columns: 1fr auto; gap: 0 10px; align-items: baseline;
   padding: 9px 0; border-bottom: 1px solid var(--trait); font-size: 15px;
 }
-.grille-prix .ligne:last-child { border-bottom: 0; }
 .grille-prix span { color: var(--gris); }
 .grille-prix b { font-size: 19px; letter-spacing: -0.02em; }
-.grille-prix small { grid-column: 1 / -1; color: var(--vert); font-size: 13.5px; font-weight: 600; line-height: 1.35; }
+.grille-prix .plus { margin: 0; padding: 9px 0; border-bottom: 1px solid var(--trait); color: var(--vert); font-size: 14px; font-weight: 600; line-height: 1.35; }
+.grille-prix .plus b { font-size: 17px; white-space: nowrap; }
+.paliers { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 13.5px; }
+.paliers th, .paliers td { padding: 4px 0; text-align: right; font-weight: 400; white-space: nowrap; }
+.paliers th:first-child { text-align: left; }
+.paliers thead th { color: var(--gris); font-size: 11px; text-transform: uppercase; letter-spacing: .03em; padding-bottom: 6px; }
+.paliers thead th + th, .paliers td { padding-left: 8px; }
+.paliers tbody th { color: var(--gris); }
+.paliers td:nth-child(2) { color: var(--gris); }
+.paliers td:last-child { font-weight: 600; }
+.paliers tr.meilleur td:last-child { color: var(--vert); }
+.paliers tr.meilleur td:last-child::after {
+  content: ""; display: inline-block; width: 6px; height: 6px; margin-left: 5px;
+  border-radius: 50%; background: var(--corail); vertical-align: middle;
+}
 
 /* Sur un écran moyen, cinq colonnes seraient trop étroites : chaque taille
    devient une ligne, le dessin à gauche et les prix à droite. */
@@ -451,17 +464,28 @@ input:focus, textarea:focus, select:focus {
   .choix-tailles .tarif { margin: 0; }
 }
 
-/* Les quantités : trois cartes, dont les prix suivent la taille choisie. */
-.choix-quantites { display: grid; gap: 10px; margin-top: 16px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
-.choix-quantites .combien { display: block; font-size: 20px; font-weight: 700; letter-spacing: -0.03em; }
-.choix-quantites .total { display: block; font-size: 17px; margin-top: 2px; font-variant-numeric: tabular-nums; }
-.choix-quantites .gain { display: block; margin-top: 6px; color: var(--vert); font-size: 13.5px; font-weight: 600; line-height: 1.35; }
+/* Les quantités : cinq cartes, dont les prix suivent la taille choisie. */
+.regle-prix { margin: 10px 0 0; font-size: 15px; }
+.regle-prix b { color: var(--vert); }
+.choix-quantites { display: grid; gap: 8px; margin-top: 18px; grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.choix-quantites label { padding: 14px 10px 12px; text-align: center; }
+.choix-quantites .combien { display: block; color: var(--gris); font-size: 13px; line-height: 1.2; }
+.choix-quantites .combien b { display: block; color: var(--encre); font-size: 24px; font-weight: 700; letter-spacing: -0.03em; line-height: 1.1; }
+.choix-quantites .total { display: block; font-size: 17px; font-weight: 600; margin-top: 6px; font-variant-numeric: tabular-nums; }
+.choix-quantites .gain { display: block; margin-top: 4px; color: var(--vert); font-size: 12.5px; font-weight: 600; line-height: 1.3; }
 .choix-quantites .badge {
-  position: absolute; top: -11px; right: 12px; background: var(--corail); color: #fff;
-  font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 999px;
+  position: absolute; top: -10px; left: 50%; transform: translateX(-50%); white-space: nowrap;
+  background: var(--corail); color: #fff; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 999px;
 }
+/* Sur téléphone, une ligne par quantité : nombre à gauche, prix à droite. */
 @media (max-width: 560px) {
-  .choix-quantites { grid-template-columns: 1fr; }
+  .choix-quantites { grid-template-columns: 1fr; gap: 8px; }
+  .choix-quantites label { display: grid; grid-template-columns: 1fr auto; grid-template-rows: auto auto; align-items: baseline; gap: 0 12px; text-align: left; padding: 12px 14px; }
+  .choix-quantites .combien { grid-row: 1 / span 2; align-self: center; font-size: 14px; }
+  .choix-quantites .combien b { display: inline; font-size: 22px; margin-right: 4px; }
+  .choix-quantites .total { margin: 0; text-align: right; }
+  .choix-quantites .gain { margin: 0; text-align: right; }
+  .choix-quantites .badge { left: auto; right: 12px; transform: none; }
 }
 
 .accord { display: flex; gap: 12px; align-items: flex-start; margin: 22px 0 0; font-weight: 400; font-size: 15px; cursor: pointer; }

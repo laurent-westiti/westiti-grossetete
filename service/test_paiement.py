@@ -105,7 +105,7 @@ p = DEMANDES[-1]
 verifier("la commande renvoie vers la page Stripe", r.status_code == 303 and r.headers["location"].startswith("https://checkout.stripe.com/"))
 verifier("la commande est en attente de paiement", commandes.lire(ident)["statut"] == "attente_paiement")
 verifier("la photo est conservée pendant le paiement", photo_existe(ident))
-verifier("le montant envoyé à Stripe est 99 € (80 cm × 3)", p["line_items"][0]["price_data"]["unit_amount"] == 9900)
+verifier("le montant envoyé à Stripe est 113 € (80 cm × 3)", p["line_items"][0]["price_data"]["unit_amount"] == 11300)
 verifier("un seul article, au prix du lot", p["line_items"][0]["quantity"] == 1)
 verifier("le nom du produit est en français", p["line_items"][0]["price_data"]["product_data"]["name"] == "Grosse tête 80 cm × 3")
 verifier("la page Stripe s'affiche en français", p["locale"] == "fr")
@@ -125,12 +125,13 @@ verifier("anglais : retour vers /en/thank-you", "/en/thank-you?commande=" in p["
 commander("es", "100", 2)
 p = DEMANDES[-1]
 verifier("espagnol : page Stripe en espagnol", p["locale"] == "es")
-verifier("espagnol : 159 € pour 100 cm × 2", p["line_items"][0]["price_data"]["unit_amount"] == 15900)
+verifier("espagnol : 172 € pour 100 cm × 2", p["line_items"][0]["price_data"]["unit_amount"] == 17200)
 verifier("espagnol : retour vers /es/crear en cas d'abandon", p["cancel_url"].endswith("/es/crear?taille=100"))
-commander("it", "60", 3)
+commander("it", "60", 5)
 p = DEMANDES[-1]
 verifier("italien : page Stripe en italien", p["locale"] == "it")
-verifier("italien : produit « Testa gigante 60 cm × 3 »", p["line_items"][0]["price_data"]["product_data"]["name"] == "Testa gigante 60 cm × 3")
+verifier("italien : produit « Testa gigante 60 cm × 5 » à 112 €", p["line_items"][0]["price_data"]["product_data"]["name"] == "Testa gigante 60 cm × 5"
+         and p["line_items"][0]["price_data"]["unit_amount"] == 11200)
 verifier("italien : retour vers /it/grazie", "/it/grazie?commande=" in p["success_url"])
 
 # 3. Webhook signé : la commande passe payée, l'adresse est enregistrée.
@@ -180,6 +181,8 @@ verifier("le balayage efface les photos impayées de plus de 24 h", n >= 1 and n
 verifier("le balayage ne touche pas aux commandes payées", photo_existe(ident))
 
 # 10. Refus avant paiement.
+r = commander("fr", "60", 6)
+verifier("6 exemplaires sont refusés", r.status_code == 200 and "de 1 à 5 exemplaires" in r.text)
 r = commander("en", "60", 1, accord="")
 verifier("sans accord coché, pas de paiement (message en anglais)", r.status_code == 200 and "consent" in r.text)
 

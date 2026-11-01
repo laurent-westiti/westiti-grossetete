@@ -207,16 +207,21 @@
 
     // Les cartes de quantité affichent les prix de la taille choisie.
     if (info) {
-      [1, 2, 3].forEach(function (n) {
-        var t = document.querySelector('[data-q="' + n + '"]');
+      var ecarts = [];
+      document.querySelectorAll('[data-q]').forEach(function (e) {
+        var n = +e.getAttribute('data-q');
         var g = document.querySelector('[data-gain="' + n + '"]');
-        if (t) t.textContent = euros(info.prix[n]);
-        if (g && n > 1) {
-          g.innerHTML = T('gain' + n, {
-            plus: euros(info.prix[n] - info.prix[n - 1]), unite: euros(info.prix[n] / n)
-          });
+        e.textContent = euros(info.prix[n]);
+        if (n > 1) {
+          ecarts.push(info.prix[n] - info.prix[n - 1]);
+          if (g) g.innerHTML = T('par_panneau', { unite: euros(info.prix[n] / n) });
         }
       });
+      // « +5 € par panneau en plus », ou une fourchette si le supplément varie.
+      var a = Math.min.apply(null, ecarts), b = Math.max.apply(null, ecarts);
+      var plus = a === b ? '+' + euros(a) : T('fourchette', { a: euros(a), b: euros(b) });
+      var regle = champ('regle-prix');
+      if (regle) regle.innerHTML = T('regle', { premier: euros(info.prix[1]), plus: plus });
     }
     champ('r-total').textContent = info ? euros(total) : '—';
 

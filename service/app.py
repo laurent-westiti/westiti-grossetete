@@ -84,6 +84,14 @@ def _traducteur(langue: str):
     return t
 
 
+def _plus_panneau(t, cle: str, langue: str) -> str:
+    """« +5 € », ou « +13 € à 14 € » si le supplément varie selon le rang."""
+    a, b = reglages.supplements(cle)
+    if a == b:
+        return "+" + tr.prix(a, langue)
+    return t("grille.fourchette", a=tr.prix(a, langue), b=tr.prix(b, langue))
+
+
 def contexte(request: Request, langue: str, page: str, **plus) -> dict:
     t = _traducteur(langue)
     return {
@@ -101,6 +109,8 @@ def contexte(request: Request, langue: str, page: str, **plus) -> dict:
         "conseillee": reglages.TAILLE_CONSEILLEE,
         "plancher": reglages.prix_plancher(),
         "quantites": reglages.QUANTITES,
+        "quantite_max": reglages.QUANTITE_MAX,
+        "plus_panneau": lambda cle: _plus_panneau(t, cle, langue),
         "economie": reglages.economie_max(),
         "livraison_offerte": reglages.LIVRAISON_OFFERTE,
         "expediee": t("commun.expediee"),
@@ -125,8 +135,8 @@ def _rendre(request: Request, langue: str, page: str, **plus):
 def _page_creer(request: Request, langue: str, taille: str = "", erreur: str = ""):
     # Les textes du script gardent leurs {accolades} : c'est lui qui les remplit.
     textes_js = {cle[3:]: (v.get(langue) or v[tr.LANGUE_DEFAUT]) for cle, v in tr.T.items() if cle.startswith("js.")}
-    textes_js["gain2"] = tr.T["creer.gain2"][langue]
-    textes_js["gain3"] = tr.T["creer.gain3"][langue]
+    for cle in ("creer.par_panneau", "creer.regle", "grille.fourchette"):
+        textes_js[cle.split(".")[1]] = tr.T[cle][langue]
     return GABARITS.TemplateResponse(request, "creer.html", contexte(
         request, langue, "creer",
         choix_taille=taille if taille in reglages.TAILLES else reglages.TAILLE_CONSEILLEE,

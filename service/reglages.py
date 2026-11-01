@@ -19,18 +19,18 @@ PRODUCTION = os.environ.get("WG_PRODUCTION") == "1"
 
 # Hauteur du panneau en centimètres, et prix TTC en euros de la commande
 # selon le nombre d'exemplaires du même visage (1, 2 ou 3). Les deuxième et
-# troisième exemplaires coûtent bien moins cher que le premier : c'est
+# suivants ne coûtent qu'un supplément par panneau : c'est
 # l'argument des commandes familiales. La clé sert d'identifiant dans les
 # formulaires. Les noms des tailles sont dans traductions.py.
 TAILLES = {
-    "30":  {"hauteur": 30,  "prix": {1: 49, 2: 54, 3: 59}},
-    "45":  {"hauteur": 45,  "prix": {1: 52, 2: 59, 3: 64}},
-    "60":  {"hauteur": 60,  "prix": {1: 59, 2: 69, 3: 79}},
-    "80":  {"hauteur": 80,  "prix": {1: 64, 2: 84, 3: 99}},
-    "100": {"hauteur": 100, "prix": {1: 124, 2: 159, 3: 199}},
+    "30":  {"hauteur": 30,  "prix": {1: 49,  2: 54,  3: 59,  4: 64,  5: 69}},
+    "45":  {"hauteur": 45,  "prix": {1: 54,  2: 64,  3: 74,  4: 84,  5: 94}},
+    "60":  {"hauteur": 60,  "prix": {1: 59,  2: 72,  3: 85,  4: 98,  5: 112}},
+    "80":  {"hauteur": 80,  "prix": {1: 69,  2: 91,  3: 113, 4: 135, 5: 157}},
+    "100": {"hauteur": 100, "prix": {1: 132, 2: 172, 3: 212, 4: 252, 5: 292}},
 }
 TAILLE_CONSEILLEE = "60"
-QUANTITES = (1, 2, 3)
+QUANTITES = (1, 2, 3, 4, 5)
 QUANTITE_MAX = max(QUANTITES)
 
 LIVRAISON_OFFERTE = True
@@ -53,8 +53,16 @@ def prix_plancher() -> float:
 
 
 def economie_max() -> int:
-    """La plus forte baisse du prix par tête à trois exemplaires, en %."""
-    return max(round(100 * (1 - t["prix"][3] / 3 / t["prix"][1])) for t in TAILLES.values())
+    """La plus forte baisse du prix par panneau au nombre maximal d'exemplaires, en %."""
+    n = QUANTITE_MAX
+    return max(round(100 * (1 - t["prix"][n] / n / t["prix"][1])) for t in TAILLES.values())
+
+
+def supplements(taille: str) -> tuple:
+    """Le plus petit et le plus grand prix d'un panneau ajouté au lot."""
+    p = TAILLES[taille]["prix"]
+    ecarts = [p[q] - p[q - 1] for q in QUANTITES[1:]]
+    return min(ecarts), max(ecarts)
 
 
 # --------------------------------------------------------------------------

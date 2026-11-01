@@ -99,7 +99,7 @@
         <div class="mesure">{{ taille.hauteur }} cm</div>
         <div class="nom">{{ t("taille.%s.nom" % cle) }}</div>
         <p>{{ t("taille.%s.pour" % cle) }}</p>
-        {{ grille_prix(taille) }}
+        {{ grille_prix(cle, taille) }}
       </div>
       {% endfor %}
     </div>
